@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Document   : main.xml
+    Created on : 2010年10月19日, 上午8:47
+    Author     : princehaku
+    Description:
+        Purpose of the document follows.
+-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+<view class = "com.google.android.maps.MapView"
+    android:id = "@+id/my_map"
+    android:enabled = "true"
+    android:clickable = "true"
+    android:longClickable= "true"
+    android:apiKey="00UVNv-yo_uu2j1JlrglfEJjKbtTXJfzNOVSzLw"
+    android:layout_width="fill_parent"
+    android:layout_height="380px"
+    android:layout_alignTop="@+id/render_map"
+    />
+<ImageView
+    android:id="@+id/render_map"
+    android:layout_width="fill_parent"
+    android:layout_height="380px"
+    android:layout_alignParentTop="true"
+    android:layout_alignParentLeft="true"
+/>
+<Button
+    android:id="@+id/quan"
+    android:layout_width="76px"
+    android:layout_height="wrap_content"
+    android:text="圈圈"
+    android:layout_marginBottom="1px"
+    android:layout_marginLeft="1px"
+    android:layout_below="@+id/my_map"
+>
+</Button>
+<TextView
+    android:text="TextView01"
+    android:id="@+id/TextView01"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_x="61px"
+    android:layout_y="69px"
+    android:layout_toRightOf="@+id/quan">
+</TextView>
+</RelativeLayout>

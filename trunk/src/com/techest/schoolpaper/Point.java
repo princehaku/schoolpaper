@@ -12,19 +12,23 @@
  *  See the License for the specific language governing permissions and
  *  limitations under the License.
  *
- *  Created on : 2010-10-26, 23:30:30
+ *  Created on : 2010-10-27, 21:39:56
  *  Author     : princehaku
  */
 
 package com.techest.schoolpaper;
 
-/**按下屏幕的点的集合
+import android.graphics.Point;
+
+/**
  *
  * @author princehaku
  */
-public class PointStatu {
-    public static float lastX=0f;
-    public static float lastY=0f;
-    public static float X=0f;
-    public static float Y=0f;
+class wPoint extends Point{
+
+    wPoint(float x, float y) {
+        this.x=(int) x;
+        this.y=(int) y;
+    }
+
 }

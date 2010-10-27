@@ -49,15 +49,15 @@ public class MainActivity extends MapActivity implements OnTouchListener{
     //信息点
     private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
     //
+    Graph polygon;
     private ImageView renderMapContainer;
-    //这个位图是缓冲图.存有地理信息
-    Bitmap renderMapCacheBitmap;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.mapview);
         mTextView01 = (TextView) findViewById(R.id.TextView01);
+        polygon=new Graph();
         //初始化圈圈的画布
         renderMapContainer=(ImageView)findViewById(R.id.render_map);
         renderMapContainer.setLongClickable(true);
@@ -70,9 +70,6 @@ public class MainActivity extends MapActivity implements OnTouchListener{
         map.setLongClickable(true);
         map.setFocusable(true);
         map.setClickable(true);
-        //建立缓冲图像
-        int w = 320,h = 380;
-        renderMapCacheBitmap = Bitmap.createBitmap(w,h,Config.ARGB_8888);
         //根据map虚拟化一张画布填充至画布层
         map.setDrawingCacheEnabled(true);
         renderMapContainer.setImageBitmap(map.getDrawingCache());
@@ -107,10 +104,6 @@ public class MainActivity extends MapActivity implements OnTouchListener{
      */
     public boolean onTouch(View v, MotionEvent event) {
         mTextView01.setText(event.getAction()+"-"+event.getPressure()+"");
-        //创建一个画布 给缓冲层使用
-        Canvas canvasTemp = new Canvas(renderMapCacheBitmap);
-        Paint p = new Paint();
-        p.setColor(Color.CYAN);
         PointStatu.X=event.getX();
         PointStatu.Y=event.getY();
         switch(event.getAction())
@@ -118,24 +111,24 @@ public class MainActivity extends MapActivity implements OnTouchListener{
             case MotionEvent.ACTION_DOWN:
                 PointStatu.lastX=PointStatu.X;
                 PointStatu.lastY=PointStatu.Y;
+                polygon.addPoint(PointStatu.lastX, PointStatu.lastY);
                 break;
             case MotionEvent.ACTION_MOVE:
                 //如果当前点的横或者纵的范围超过5则画图并设置到新点
                 if(Math.abs(PointStatu.Y-PointStatu.lastY)>5||Math.abs(PointStatu.X-PointStatu.lastX)>5){
-                    canvasTemp.drawLine(PointStatu.lastX,PointStatu.lastY, PointStatu.X,PointStatu.Y,p);
                     PointStatu.lastX=PointStatu.X;
                     PointStatu.lastY=PointStatu.Y;
+                    polygon.addPoint(PointStatu.lastX, PointStatu.lastY);
+                    //更新图像
+                    renderMapContainer.setImageBitmap(polygon.getBitmap());
                 }
                 break;
             case MotionEvent.ACTION_UP:
                 //释放的时候计算坐标成地理坐标.上传给服务器
                 GeoPoint p1= map.getProjection().fromPixels((int)PointStatu.X,(int)PointStatu.Y);
-                mTextView01.setText(p1.toString()+"-");
+                mTextView01.setText(p1.toString());
                 break;
-
         }
-        //更新图像
-        renderMapContainer.setImageBitmap(renderMapCacheBitmap);
         return false;
     }
 

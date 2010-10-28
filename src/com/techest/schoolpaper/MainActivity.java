@@ -18,12 +18,9 @@
 
 package com.techest.schoolpaper;
 
-import android.graphics.Bitmap;
-import android.graphics.Bitmap.Config;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -50,6 +47,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
     private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
     //
     Graph polygon;
+    //
     private ImageView renderMapContainer;
     /** Called when the activity is first created. */
     @Override
@@ -127,9 +125,24 @@ public class MainActivity extends MapActivity implements OnTouchListener{
                 //释放的时候计算坐标成地理坐标.上传给服务器
                 GeoPoint p1= map.getProjection().fromPixels((int)PointStatu.X,(int)PointStatu.Y);
                 mTextView01.setText(p1.toString());
+                //开始动画
+                polygon.enClose();
+                MovieThread t=new MovieThread(this);
+                t.start();
                 break;
         }
         return false;
     }
 
+    public Handler cacheUpdate=new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            switch(msg.what){
+                case 1:
+                    renderMapContainer.setImageBitmap(polygon.getBitmap());
+                    break;
+            }
+            super.handleMessage(msg);
+        }
+    };
 }

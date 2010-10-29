@@ -116,6 +116,8 @@ public class Graph {
      *
      */
     public void drawScanLine(int y){
+        p.setColor(Color.GREEN);
+        canvasTemp.drawLine(0, y,width, y, p);
         //扫描线附进的多边形顶点
         ArrayList<wPoint> nearPoints=new ArrayList();
         //扫描线与多边形顶点的交点
@@ -130,6 +132,7 @@ public class Graph {
                 nearPoints.add(points.get(i));
             }
         }
+        boolean isSecond=true;
         //记录交点
         for(int i=0;i<width;i++){
             
@@ -144,17 +147,28 @@ public class Graph {
             }
             //如果颜色发生了变化 且变化期间未通过任意一个附近的多边形顶点
             if(color2!=color1&&cross==0){
-                //记录点
-                linePoints.add(new wPoint(i, y));
+                color1=color2;
+                //只在第二次过线的时候记录点
+                if(isSecond=true)
+                {
+                    linePoints.add(new wPoint(i, y));
+                }
+                if(isSecond)isSecond=false;
+                else isSecond = true;
             }
         }
+        int st=0;
+        p.setColor(Color.RED);
         for(int i=0;i<linePoints.size();i++){
-            //总是从奇数点向偶数点画线
+            //总是从奇数点向偶数点画线 且只画奇数的线
             if(i%2==0&&i!=0){
-                canvasTemp.drawLine(linePoints.get(i-1).x, y,linePoints.get(i).x, y, p);
+                st++;
+                Log.i("",st+"");
+                if(st%2!=0)canvasTemp.drawLine(linePoints.get(i-1).x, y,linePoints.get(i).x, y, p);
             }
         }
-
+        //
+        //
     }
     /**下一帧动画
      *
@@ -164,20 +178,15 @@ public class Graph {
         canvasTemp = new Canvas(getBitmapFromCache());
 
         if(direction==0){
-            p.setColor(Color.GREEN);
             lasty-=5;
-            Log.i("", lasty+"");
             if(lasty<=0){
                 direction=1;
             }
         }
         else{
-            p.setColor(Color.RED);
             lasty+=5;
-            Log.i("", lasty+"");
             if(lasty>=height){
                 direction=0;
-                Log.i("","Change ");
             }
         }
         drawScanLine(lasty);

@@ -116,6 +116,44 @@ public class Graph {
      *
      */
     public void drawScanLine(int y){
+        //扫描线附进的多边形顶点
+        ArrayList<wPoint> nearPoints=new ArrayList();
+        //扫描线与多边形顶点的交点
+        ArrayList<wPoint> linePoints=new ArrayList();
+        if(y<0)y=0;
+        if(y>=height)y=height-1;
+        int color1=cacheBitmap.getPixel(0, y);
+        int color2=cacheBitmap.getPixel(0, y);
+        //计算并统计附近可能存在的多边形顶点
+        for(int i=0;i<points.size();i++){
+            if(Math.abs(points.get(i).y-y)<=5){
+                nearPoints.add(points.get(i));
+            }
+        }
+        //记录交点
+        for(int i=0;i<width;i++){
+            
+            color2=cacheBitmap.getPixel(i, y);
+
+            int cross=0;
+
+            for(int j=0;j<nearPoints.size();j++){
+                if(nearPoints.get(j).x==i){
+                    cross=1;
+                }
+            }
+            //如果颜色发生了变化 且变化期间未通过任意一个附近的多边形顶点
+            if(color2!=color1&&cross==0){
+                //记录点
+                linePoints.add(new wPoint(i, y));
+            }
+        }
+        for(int i=0;i<linePoints.size();i++){
+            //总是从奇数点向偶数点画线
+            if(i%2==0&&i!=0){
+                canvasTemp.drawLine(linePoints.get(i-1).x, y,linePoints.get(i).x, y, p);
+            }
+        }
 
     }
     /**下一帧动画
@@ -142,7 +180,7 @@ public class Graph {
                 Log.i("","Change ");
             }
         }
-        canvasTemp.drawLine(0,lasty,width,lasty,p);
+        drawScanLine(lasty);
     }
     /**用最后一个绘图的点更新缓冲区内的图像
      * 

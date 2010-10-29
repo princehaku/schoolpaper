@@ -30,7 +30,7 @@ import java.util.ArrayList;
  *
  * @author princehaku
  */
-public class Graph {
+public class Polygon {
     /**这个位图绘图层
      *@return Bitmap 
      */
@@ -55,10 +55,12 @@ public class Graph {
      *
      */
     private Paint p;
-    /**上次动画的y值
+    /**扫描线y值
      *
      */
-    private int lasty=0;
+    private int lasty1=0;
+    private int lasty2=100;
+    private int lasty3=380;
     /**上个点的序号
      *
      */
@@ -66,13 +68,15 @@ public class Graph {
     /**扫描线方向
      *
      */
-    private int direction=0;
+    private int direction1=0;
+    private int direction2=0;
+    private int direction3=0;
     /**多边形的顶点序列
      *
      */
     private ArrayList<wPoint> points=new ArrayList();
 
-    public Graph() {
+    public Polygon() {
         //建立缓冲图像
         width = 320;height = 380;
         drawBitmap = Bitmap.createBitmap(width,height,Config.ARGB_8888);
@@ -80,8 +84,8 @@ public class Graph {
         canvasTemp = new Canvas(drawBitmap);
         //初始化画笔
         p = new Paint();
-        p.setColor(Color.CYAN);
-        p.setStrokeWidth(3);
+        p.setColor(Color.GRAY);
+        p.setStrokeWidth(2);
     }
     /**重置图像为空
      * 
@@ -116,6 +120,7 @@ public class Graph {
      *
      */
     public void drawScanLine(int y){
+        p.setStrokeWidth(3);
         p.setColor(Color.GREEN);
         canvasTemp.drawLine(0, y,width, y, p);
         //扫描线附进的多边形顶点
@@ -126,12 +131,6 @@ public class Graph {
         if(y>=height)y=height-1;
         int color1=cacheBitmap.getPixel(0, y);
         int color2=cacheBitmap.getPixel(0, y);
-        //计算并统计附近可能存在的多边形顶点
-        for(int i=0;i<points.size();i++){
-            if(Math.abs(points.get(i).y-y)<=5){
-                nearPoints.add(points.get(i));
-            }
-        }
         boolean isSecond=true;
         //记录交点
         for(int i=0;i<width;i++){
@@ -140,8 +139,9 @@ public class Graph {
 
             int cross=0;
 
-            for(int j=0;j<nearPoints.size();j++){
-                if(nearPoints.get(j).x==i){
+            //计算并统计附近可能存在的多边形顶点
+            for(int j=0;j<points.size();j++){
+                if((points.get(j).y==y)&&(points.get(j).x==i)){
                     cross=1;
                 }
             }
@@ -163,7 +163,6 @@ public class Graph {
             //总是从奇数点向偶数点画线 且只画奇数的线
             if(i%2==0&&i!=0){
                 st++;
-                Log.i("",st+"");
                 if(st%2!=0)canvasTemp.drawLine(linePoints.get(i-1).x, y,linePoints.get(i).x, y, p);
             }
         }
@@ -177,19 +176,55 @@ public class Graph {
         
         canvasTemp = new Canvas(getBitmapFromCache());
 
-        if(direction==0){
-            lasty-=5;
-            if(lasty<=0){
-                direction=1;
+        if(direction1==0){
+            lasty1-=5;
+            if(lasty1<=0){
+                direction1=1;
             }
         }
         else{
-            lasty+=5;
-            if(lasty>=height){
-                direction=0;
+            lasty1+=5;
+            if(lasty1>=height){
+                direction1=0;
             }
         }
-        drawScanLine(lasty);
+
+        if(direction2==0){
+            lasty2-=15;
+            if(lasty2<=0){
+                direction2=1;
+            }
+        }
+        else{
+            lasty2+=15;
+            if(lasty2>=height){
+                direction2=0;
+            }
+
+        }
+
+        if(direction3==0){
+            lasty3-=30;
+            if(lasty3<=0){
+                direction3=1;
+            }
+        }
+        else{
+            lasty3+=30;
+            if(lasty3>=height){
+                direction3=0;
+            }
+        }
+        drawScanLine(lasty1);
+        drawScanLine(lasty2);
+        drawScanLine(lasty3);
+    }
+    /**判断点是否在图形内
+     *
+     */
+    public boolean isInPolygon(double x,double y){
+        
+        return true;
     }
     /**用最后一个绘图的点更新缓冲区内的图像
      * 
@@ -227,6 +262,28 @@ public class Graph {
      */
     public void addPoint(float x,float y){
         points.add(new wPoint(x,y));
+    }
+    /**判断这个点附近是否有其他像素存在
+     * @deprecated
+     * @param X
+     * @param Y
+     * @return
+     */
+    boolean hasPixNearBy(float x, float y) {
+                boolean noPixNearBy=false;
+                for(int i=(int) (x - 2);i<(int)(x+2);i++){
+                    for(int j=(int) (y - 2);j<(int)(y+2);j++){
+                        try{
+                            int pixColor=drawBitmap.getPixel(i, j);
+                            if(pixColor==Color.GRAY){
+                                noPixNearBy=true;
+                            }
+                        }catch(Exception ex){
+                            Log.i("","Out of Range");
+                        }
+                    }
+                }
+                return noPixNearBy;
     }
 
 

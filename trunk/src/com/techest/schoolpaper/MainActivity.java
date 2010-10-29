@@ -46,7 +46,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
     //信息点
     private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
     //
-    Graph polygon;
+    Polygon polygon;
     //
     private ImageView renderMapContainer;
     /** Called when the activity is first created. */
@@ -55,7 +55,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
         super.onCreate(icicle);
         setContentView(R.layout.mapview);
         mTextView01 = (TextView) findViewById(R.id.TextView01);
-        polygon=new Graph();
+        polygon=new Polygon();
         //初始化圈圈的画布
         renderMapContainer=(ImageView)findViewById(R.id.render_map);
         renderMapContainer.setLongClickable(true);
@@ -112,8 +112,8 @@ public class MainActivity extends MapActivity implements OnTouchListener{
                 polygon.addPoint(PointStatu.lastX, PointStatu.lastY);
                 break;
             case MotionEvent.ACTION_MOVE:
-                //如果当前点的横或者纵的范围超过5则画图并设置到新点
-                if(Math.abs(PointStatu.Y-PointStatu.lastY)>5||Math.abs(PointStatu.X-PointStatu.lastX)>5){
+                //如果当前点的x或者y范围超过5且5像素内无其他像素则画图并设置到新点
+                if((Math.abs(PointStatu.Y-PointStatu.lastY)>5||Math.abs(PointStatu.X-PointStatu.lastX)>5)){
                     PointStatu.lastX=PointStatu.X;
                     PointStatu.lastY=PointStatu.Y;
                     polygon.addPoint(PointStatu.lastX, PointStatu.lastY);
@@ -122,6 +122,8 @@ public class MainActivity extends MapActivity implements OnTouchListener{
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                renderMapContainer.setLongClickable(false);
+                map.setClickable(false);
                 //释放的时候计算坐标成地理坐标.上传给服务器
                 GeoPoint p1= map.getProjection().fromPixels((int)PointStatu.X,(int)PointStatu.Y);
                 mTextView01.setText(p1.toString());

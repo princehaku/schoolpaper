@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-     package="com.techest.schoolpaper">
+     package="net.techest.schoolpaper">
     <application>
         <uses-library android:name="com.google.android.maps" />
          <activity android:name=".MainActivity" android:label="校纸">

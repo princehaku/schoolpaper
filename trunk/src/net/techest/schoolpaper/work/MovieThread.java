@@ -16,7 +16,9 @@
  *  Author     : princehaku
  */
 
-package net.techest.schoolpaper;
+package net.techest.schoolpaper.work;
+
+import net.techest.schoolpaper.MainActivity;
 
 /**用于显示动画
  *
@@ -29,16 +31,27 @@ public class MovieThread extends Thread {
      */
     private static MainActivity res;
     
-    MovieThread(MainActivity res) {
+    public MovieThread(MainActivity res) {
         MovieThread.res = res;
     }
-    
+    /**用于外部强行终止线程
+     *
+     */
+    private boolean isEnd=false;
     @Override
     public void run() {
-            while(1==1)
+            while(1==1&&isEnd==false)
             {
                 res.polygon.nextFrame();
                 res.cacheUpdateHandler.sendEmptyMessage(1);
             }
         }
+
+    public boolean isIsEnd() {
+        return isEnd;
+    }
+
+    public void setIsEnd(boolean isEnd) {
+        this.isEnd = isEnd;
+    }
 }

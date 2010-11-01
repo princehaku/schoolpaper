@@ -12,5 +12,6 @@ package net.techest.schoolpaper.paper;
 public enum PaperType {
     BAIKE,
     XINWEN,
-    SUIPIAN
+    SUIPIAN,
+    QITA
 }

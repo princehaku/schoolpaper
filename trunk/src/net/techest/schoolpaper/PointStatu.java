@@ -18,7 +18,7 @@
 
 package net.techest.schoolpaper;
 
-/**按下屏幕的点的集合
+/**按下屏幕的点的状态
  *
  * @author princehaku
  */

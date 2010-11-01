@@ -30,13 +30,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.google.android.maps.GeoPoint;
-import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
-import java.util.ArrayList;
 import java.util.List;
+import net.techest.schoolpaper.paper.PaperOverlay;
 
 /**
  *
@@ -153,13 +152,14 @@ public class MainActivity extends MapActivity implements OnTouchListener{
         }
     };
     
-    public Handler mapPointUpdateHandler=new Handler() {
+    public Handler mapPointAddHandler=new Handler() {
         @Override
         public void handleMessage(Message msg) {
             map.setClickable(true);
             String x =(String)Message.obtain(msg).getData().get("x");
             String y =(String)Message.obtain(msg).getData().get("y");
             String title =(String)Message.obtain(msg).getData().get("title");
+            String type =(String)Message.obtain(msg).getData().get("type");
             String description =(String)Message.obtain(msg).getData().get("description");
             String deepth =(String)Message.obtain(msg).getData().get("deepth");
             mTextView01.setText(title.toString());
@@ -168,6 +168,9 @@ public class MainActivity extends MapActivity implements OnTouchListener{
             PaperOverlay itemizedoverlay = new PaperOverlay(drawable,map.getContext());
             GeoPoint point = new GeoPoint(30673390,104140412);
             OverlayItem overlayitem = new OverlayItem(point, title, description);
+            itemizedoverlay.addOverlay(overlayitem);
+            point = new GeoPoint(30674390,104140212);
+            overlayitem = new OverlayItem(point, title, description);
             itemizedoverlay.addOverlay(overlayitem);
             mapOverlays.add(itemizedoverlay);
             super.handleMessage(msg);

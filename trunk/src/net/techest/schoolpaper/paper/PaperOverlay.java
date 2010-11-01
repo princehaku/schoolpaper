@@ -16,8 +16,9 @@
  *  Author     : princehaku
  */
 
-package net.techest.schoolpaper;
+package net.techest.schoolpaper.paper;
 
+import net.techest.schoolpaper.*;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -25,20 +26,29 @@ import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
 import java.util.ArrayList;
 
-/**
+/**地图上的标注
  *
  * @author princehaku
  */
 public class PaperOverlay extends ItemizedOverlay{
+    
     Context mContext;
-    public PaperOverlay(Drawable defaultMarker) {
-      super(boundCenterBottom(defaultMarker));
-    }
 
+    private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
+    /**
+     * 
+     * @param defaultMarker
+     * @param context
+     */
     public PaperOverlay(Drawable defaultMarker, Context context) {
       super(boundCenterBottom(defaultMarker));
       mContext = context;
     }
+    /**点击时显示
+     *
+     * @param index
+     * @return
+     */
     @Override
     protected boolean onTap(int index) {
       OverlayItem item = mOverlays.get(index);
@@ -48,8 +58,6 @@ public class PaperOverlay extends ItemizedOverlay{
       dialog.show();
       return true;
     }
-    
-    private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 
     public void addOverlay(OverlayItem overlay) {
         mOverlays.add(overlay);

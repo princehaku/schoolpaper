@@ -43,9 +43,10 @@ public class FetchThread extends Thread {
         ble.putString("x","30.673103");
         ble.putString("y","104.140734");
         ble.putString("title","副本1");
-        ble.putString("title","description");
+        ble.putString("type","1");
+        ble.putString("description","description");
         ble.putString("deepth","5");
         msg.setData(ble);
-        res.mapPointUpdateHandler.sendMessage(msg);
+        res.mapPointAddHandler.sendMessage(msg);
     }
 }

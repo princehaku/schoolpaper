@@ -24,9 +24,16 @@ import android.graphics.Point;
  *
  * @author princehaku
  */
-class wPoint extends Point{
+class PolygonPoint extends Point{
 
-    wPoint(float x, float y) {
+    int x(){
+        return this.x;
+    }
+
+    int y(){
+        return this.y;
+    }
+    PolygonPoint(float x, float y) {
         this.x=(int) x;
         this.y=(int) y;
     }

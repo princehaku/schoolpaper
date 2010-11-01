@@ -58,9 +58,7 @@ public class Polygon {
     /**扫描线y值
      *
      */
-    private int lasty1=0;
-    private int lasty2=100;
-    private int lasty3=380;
+    private int lasty=0;
     /**上个点的序号
      *
      */
@@ -68,13 +66,11 @@ public class Polygon {
     /**扫描线方向
      *
      */
-    private int direction1=0;
-    private int direction2=0;
-    private int direction3=0;
+    private int direction=0;
     /**多边形的顶点序列
      *
      */
-    private ArrayList<wPoint> points=new ArrayList();
+    private ArrayList<PolygonPoint> points=new ArrayList();
 
     public Polygon() {
         //建立缓冲图像
@@ -88,11 +84,13 @@ public class Polygon {
         p.setStrokeWidth(2);
     }
     /**重置图像为空
-     * 
+     * @deprecated
      */
     public void reset(){
         drawBitmap = Bitmap.createBitmap(width,height,Config.ARGB_8888);
+        canvasTemp = new Canvas(drawBitmap);
         cacheBitmap=null;
+        lastPoingIndex=0;
         points.clear();
     }
     /**得到绘图层
@@ -120,80 +118,72 @@ public class Polygon {
      *
      */
     public void drawScanLine(int y){
+        //画条直线
         p.setStrokeWidth(3);
         p.setColor(Color.GREEN);
         canvasTemp.drawLine(0, y,width, y, p);
-        //扫描线附进的多边形顶点
-        ArrayList<wPoint> nearPoints=new ArrayList();
-        //扫描线与多边形顶点的交点
-        ArrayList<wPoint> linePoints=new ArrayList();
-        if(y<0)y=0;
-        if(y>=height)y=height-1;
-        int color1=cacheBitmap.getPixel(0, y);
-        int color2=cacheBitmap.getPixel(0, y);
-        boolean isSecond=true;
-        //记录交点
-        for(int i=0;i<width;i++){
-            
-            color2=cacheBitmap.getPixel(i, y);
-
-            int cross=0;
-
-            //计算并统计附近可能存在的多边形顶点
-            for(int j=0;j<points.size();j++){
-                if((points.get(j).y==y)&&(points.get(j).x==i)){
-                    cross=1;
-                }
-            }
-            //如果颜色发生了变化 且变化期间未通过任意一个附近的多边形顶点
-            if(color2!=color1&&cross==0){
-                color1=color2;
-                //只在第二次过线的时候记录点
-                if(isSecond=true)
-                {
-                    linePoints.add(new wPoint(i, y));
-                }
-                if(isSecond)isSecond=false;
-                else isSecond = true;
-            }
-        }
-        int st=0;
+        //画虚线
         p.setColor(Color.RED);
-        for(int i=0;i<linePoints.size();i++){
-            //总是从奇数点向偶数点画线 且只画奇数的线
-            if(i%2==0&&i!=0){
-                st++;
-                if(st%2!=0)canvasTemp.drawLine(linePoints.get(i-1).x, y,linePoints.get(i).x, y, p);
+	int[] xs=new int[256];
+	PolygonPoint pt0;
+	PolygonPoint pt1;
+        int cn = 0;
+        for (int i = 0; i < points.size(); i++) {
+            pt0 = points.get(i);
+            int idx = (i + 1) % points.size();
+            pt1 = points.get(idx);
+            //跳过水平边
+            if (pt0.y() == pt1.y()) {
+                continue;
+            }
+            if (pt0.y() > pt1.y()) {
+                //交换点坐标
+                PolygonPoint pt = pt0;
+                pt0 = pt1;
+                pt1 = pt;
+            }
+            if (y == pt1.y()) {
+                continue;
+            }
+            if (y >= pt0.y() && y <= pt1.y()) {
+                int x = pt0.x() + (y - pt0.y()) * (pt1.x() - pt0.x()) / (pt1.y() - pt0.y());
+                int j = 0;
+                for (j = cn - 1; j >= 0; j--) {
+                    if (x <= xs[j]) {
+                        break;
+                    }
+                    xs[j + 1] = xs[j];
+                }
+                xs[j + 1] = x;
+                cn++;
             }
         }
-        //
-        //
+        for (int i = 0; i < cn; i += 2) {
+            canvasTemp.drawLine(xs[i], y, xs[i + 1], y, p);
+        }
+
     }
     /**下一帧动画
      *
      */
     public void nextFrame(){
 
-        try{
-            canvasTemp = new Canvas(getBitmapFromCache());
-        }
-        catch(Exception ex){
-            return;
-        }
+        canvasTemp = new Canvas(getBitmapFromCache());
 
-        if(direction1==0){
-            lasty1-=5;
-            if(lasty1<=0){
-                direction1=1;
+        if(direction==0){
+            lasty-=3;
+            if(lasty<=0){
+                direction=1;
             }
         }
         else{
-            lasty1+=5;
-            if(lasty1>=height){
-                direction1=0;
+            lasty+=3;
+            if(lasty>=height){
+                direction=0;
             }
         }
-        drawScanLine(lasty1);
+        Log.i("","line at:"+lasty);
+        drawScanLine(lasty);
     }
     /**判断点是否在图形内
      *
@@ -208,10 +198,11 @@ public class Polygon {
     public void update()
     {
         //前个点
-        wPoint p0 = null;
+        PolygonPoint p0 = null;
         //新点
-        wPoint p1;
+        PolygonPoint p1;
         
+        Log.i("", "points :"+points.size());
         for(int i=lastPoingIndex;i<points.size();i++){
             if(i==lastPoingIndex)
             {
@@ -237,7 +228,7 @@ public class Polygon {
      * @param y
      */
     public void addPoint(float x,float y){
-        points.add(new wPoint(x,y));
+        points.add(new PolygonPoint(x,y));
     }
     /**判断这个点附近是否有其他像素存在
      * @deprecated
@@ -260,6 +251,26 @@ public class Polygon {
                     }
                 }
                 return noPixNearBy;
+    }
+    /**填充多边形
+     *
+     */
+    public void fill() {
+
+        int min,max;
+	min=points.get(0).y();
+	max=points.get(0).y();
+	for(int i=0;i<points.size();i++)
+	{
+		if(min>points.get(i).y())min=points.get(i).y();
+		if(max<points.get(i).y())max=points.get(i).y();
+	}
+	Log.i("","min:"+min+" - max:"+max);
+	for(int u=min;u<max;u++)
+	{
+            drawScanLine(u);
+	}
+
     }
 
 

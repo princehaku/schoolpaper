@@ -18,10 +18,13 @@
 
 package net.techest.schoolpaper;
 
+import net.techest.schoolpaper.work.MovieThread;
+import net.techest.schoolpaper.work.FetchThread;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -46,17 +49,20 @@ public class MainActivity extends MapActivity implements OnTouchListener{
     private MapView map;
     //测试用的文本框
     private TextView mTextView01;
-    //
-    Polygon polygon;
-    //
+    //多边形
+    public Polygon polygon;
+    //地图上的渲染层
     private ImageView renderMapContainer;
+    //动画线程
+    MovieThread t;
+    //c/s模块的请求线程
+    FetchThread f;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.mapview);
         mTextView01 = (TextView) findViewById(R.id.TextView01);
-        polygon=new Polygon();
         //初始化圈圈的画布
         renderMapContainer=(ImageView)findViewById(R.id.render_map);
         renderMapContainer.setLongClickable(true);
@@ -79,8 +85,12 @@ public class MainActivity extends MapActivity implements OnTouchListener{
          new OnClickListener(){
 
             public void onClick(View v) {
+                polygon=new Polygon();
                 //使画布显示 覆盖在mapview之上 开始工作
                 renderMapContainer.setVisibility(View.VISIBLE);
+                renderMapContainer.setLongClickable(true);
+                renderMapContainer.setImageBitmap(map.getDrawingCache());
+                map.setClickable(false);
             }
             }
         );
@@ -102,7 +112,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
      * @return
      */
     public boolean onTouch(View v, MotionEvent event) {
-        //mTextView01.setText(event.getAction()+"-"+event.getPressure()+"");
+        mTextView01.setText(event.getAction()+"-"+event.getPressure()+"");
         PointStatu.X=event.getX();
         PointStatu.Y=event.getY();
         switch(event.getAction())
@@ -131,10 +141,10 @@ public class MainActivity extends MapActivity implements OnTouchListener{
                 //画封闭线
                 polygon.enClose();
                 //开始动画
-                MovieThread t=new MovieThread(this);
-                //t.start();
-                FetchThread f=new FetchThread(this);
-                f.start();
+                t=new MovieThread(this);
+                t.start();
+                f=new FetchThread(this);
+                //f.start();
                 break;
         }
         return false;
@@ -156,6 +166,17 @@ public class MainActivity extends MapActivity implements OnTouchListener{
         @Override
         public void handleMessage(Message msg) {
             map.setClickable(true);
+            //终止动画线程 
+            t.setIsEnd(true);
+            while(t.isAlive()){
+                //Log.i("","Wait for Movie Thread to end");
+            }
+            PointStatu.lastX=0f;
+            PointStatu.lastY=0f;
+            PointStatu.X=0f;
+            PointStatu.Y=0f;
+            renderMapContainer.setVisibility(View.INVISIBLE);
+            //-------------
             String x =(String)Message.obtain(msg).getData().get("x");
             String y =(String)Message.obtain(msg).getData().get("y");
             String title =(String)Message.obtain(msg).getData().get("title");
@@ -168,9 +189,6 @@ public class MainActivity extends MapActivity implements OnTouchListener{
             PaperOverlay itemizedoverlay = new PaperOverlay(drawable,map.getContext());
             GeoPoint point = new GeoPoint(30673390,104140412);
             OverlayItem overlayitem = new OverlayItem(point, title, description);
-            itemizedoverlay.addOverlay(overlayitem);
-            point = new GeoPoint(30674390,104140212);
-            overlayitem = new OverlayItem(point, title, description);
             itemizedoverlay.addOverlay(overlayitem);
             mapOverlays.add(itemizedoverlay);
             super.handleMessage(msg);

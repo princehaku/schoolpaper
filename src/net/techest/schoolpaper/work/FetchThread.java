@@ -15,10 +15,11 @@
  *  Created on : 2010-10-29, 23:44:24
  *  Author     : princehaku
  */
-package net.techest.schoolpaper;
+package net.techest.schoolpaper.work;
 
 import android.os.Bundle;
 import android.os.Message;
+import net.techest.schoolpaper.MainActivity;
 
 /**得到从服务器返回的数据
  *
@@ -31,13 +32,14 @@ public class FetchThread extends Thread {
      */
     private static MainActivity res;
 
-    FetchThread(MainActivity res) {
+    public FetchThread(MainActivity res) {
         FetchThread.res = res;
     }
-
+    /**创建msg 并发送给主线程
+     *
+     */
     @Override
     public void run() {
-        //创建msg 并发送给主线程
         Message msg = new Message();
         Bundle ble = new Bundle();
         ble.putString("x","30.673103");

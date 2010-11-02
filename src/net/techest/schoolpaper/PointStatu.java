@@ -27,4 +27,11 @@ public class PointStatu {
     public static float lastY=0f;
     public static float X=0f;
     public static float Y=0f;
+
+    static void reset() {
+            PointStatu.lastX=0f;
+            PointStatu.lastY=0f;
+            PointStatu.X=0f;
+            PointStatu.Y=0f;
+    }
 }

@@ -23,11 +23,11 @@ package net.techest.schoolpaper;
  * @author princehaku
  */
 public class PointStatu {
+
     public static float lastX=0f;
     public static float lastY=0f;
     public static float X=0f;
     public static float Y=0f;
-
     static void reset() {
             PointStatu.lastX=0f;
             PointStatu.lastY=0f;

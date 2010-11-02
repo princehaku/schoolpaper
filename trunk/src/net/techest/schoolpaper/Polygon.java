@@ -182,7 +182,7 @@ public class Polygon {
                 direction=0;
             }
         }
-        Log.i("","line at:"+lasty);
+        //Log.i("","line at:"+lasty);
         drawScanLine(lasty);
     }
     /**判断点是否在图形内
@@ -202,7 +202,7 @@ public class Polygon {
         //新点
         PolygonPoint p1;
         
-        Log.i("", "points :"+points.size());
+        //Log.i("", "points :"+points.size());
         for(int i=lastPoingIndex;i<points.size();i++){
             if(i==lastPoingIndex)
             {

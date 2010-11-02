@@ -63,13 +63,11 @@ public class HttpConnecter {
 			}
 			// 关闭连接
 			httpConn.disconnect();
-			// System.out.println(content);
 			return content;
 
 		} catch (Exception e) {
 			// 关闭连接
 			httpConn.disconnect();
-			// System.out.println(e.getMessage());
 			throw e;
                 }
 	}

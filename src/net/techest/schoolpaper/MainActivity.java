@@ -85,12 +85,13 @@ public class MainActivity extends MapActivity implements OnTouchListener{
          new OnClickListener(){
 
             public void onClick(View v) {
-                map.setClickable(false);
-                polygon=new Polygon();
-                renderMapContainer.setVisibility(View.INVISIBLE);
                 if(f!=null&&f.isAlive()){
                     return;
                 }
+                map.setClickable(false);
+                renderMapContainer.setVisibility(View.INVISIBLE);
+                polygon=new Polygon();
+                renderMapContainer.setImageBitmap(map.getDrawingCache());
                 PointStatu.reset();
                 //使画布显示 覆盖在mapview之上 开始工作
                 renderMapContainer.setVisibility(View.VISIBLE);
@@ -165,19 +166,24 @@ public class MainActivity extends MapActivity implements OnTouchListener{
             super.handleMessage(msg);
         }
     };
-    
-    public Handler mapPointAddHandler=new Handler() {
+    public Handler finishHandler =new Handler(){
         @Override
         public void handleMessage(Message msg) {
-            map.setClickable(true);
-            //终止动画线程 
+            //终止动画线程
             t.setIsEnd(true);
             while(t.isAlive()){
-                //Log.i("","Wait for Movie Thread to end");
+                Log.i("","Wait for Movie Thread to end");
             }
             PointStatu.reset();
             renderMapContainer.setVisibility(View.INVISIBLE);
             //-------------
+            map.setClickable(true);
+        }
+    };
+
+    public Handler mapPointAddHandler=new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
             String x =(String)Message.obtain(msg).getData().get("x");
             String y =(String)Message.obtain(msg).getData().get("y");
             String title =(String)Message.obtain(msg).getData().get("title");

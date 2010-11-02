@@ -85,12 +85,16 @@ public class MainActivity extends MapActivity implements OnTouchListener{
          new OnClickListener(){
 
             public void onClick(View v) {
+                map.setClickable(false);
                 polygon=new Polygon();
+                renderMapContainer.setVisibility(View.INVISIBLE);
+                if(f!=null&&f.isAlive()){
+                    return;
+                }
+                PointStatu.reset();
                 //使画布显示 覆盖在mapview之上 开始工作
                 renderMapContainer.setVisibility(View.VISIBLE);
                 renderMapContainer.setLongClickable(true);
-                renderMapContainer.setImageBitmap(map.getDrawingCache());
-                map.setClickable(false);
             }
             }
         );
@@ -144,7 +148,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
                 t=new MovieThread(this);
                 t.start();
                 f=new FetchThread(this);
-                //f.start();
+                f.start();
                 break;
         }
         return false;
@@ -171,10 +175,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
             while(t.isAlive()){
                 //Log.i("","Wait for Movie Thread to end");
             }
-            PointStatu.lastX=0f;
-            PointStatu.lastY=0f;
-            PointStatu.X=0f;
-            PointStatu.Y=0f;
+            PointStatu.reset();
             renderMapContainer.setVisibility(View.INVISIBLE);
             //-------------
             String x =(String)Message.obtain(msg).getData().get("x");

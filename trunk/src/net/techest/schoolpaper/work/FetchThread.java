@@ -20,6 +20,7 @@ package net.techest.schoolpaper.work;
 import android.os.Bundle;
 import android.os.Message;
 import net.techest.schoolpaper.MainActivity;
+import net.techest.schoolpaper.net.HttpConnecter;
 
 /**得到从服务器返回的数据
  *
@@ -40,6 +41,7 @@ public class FetchThread extends Thread {
      */
     @Override
     public void run() {
+        HttpConnecter c=new HttpConnecter();
         Message msg = new Message();
         Bundle ble = new Bundle();
         ble.putString("x","30.673103");

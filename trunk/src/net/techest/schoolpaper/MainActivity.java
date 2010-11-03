@@ -57,10 +57,13 @@ public class MainActivity extends MapActivity implements OnTouchListener{
     MovieThread t;
     //c/s模块的请求线程
     FetchThread f;
+    //警告窗口
+    public AlertWindow alert;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        alert=new AlertWindow(this);
         setContentView(R.layout.mapview);
         mTextView01 = (TextView) findViewById(R.id.TextView01);
         //初始化圈圈的画布
@@ -141,7 +144,8 @@ public class MainActivity extends MapActivity implements OnTouchListener{
                 renderMapContainer.setLongClickable(false);
                 map.setClickable(false);
                 //释放的时候计算坐标成地理坐标.上传给服务器
-                GeoPoint p1= map.getProjection().fromPixels((int)PointStatu.X,(int)PointStatu.Y);
+                GeoPoint p1= map.getProjection().fromPixels(0,0);
+                GeoPoint p2= map.getProjection().fromPixels(map.getWidth(),map.getHeight());
                 //mTextView01.setText(p1.toString());
                 //画封闭线
                 polygon.enClose();
@@ -154,7 +158,9 @@ public class MainActivity extends MapActivity implements OnTouchListener{
         }
         return false;
     }
-
+    /**更新渲染层图像
+     *
+     */
     public Handler cacheUpdateHandler=new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -166,6 +172,9 @@ public class MainActivity extends MapActivity implements OnTouchListener{
             super.handleMessage(msg);
         }
     };
+    /**终止动画线程
+     *
+     */
     public Handler finishHandler =new Handler(){
         @Override
         public void handleMessage(Message msg) {

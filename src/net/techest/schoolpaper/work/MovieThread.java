@@ -30,7 +30,17 @@ public class MovieThread extends Thread {
      *
      */
     private static MainActivity res;
-    
+
+    /**扫描线y值
+     *
+     */
+    private int lasty=0;
+
+    /**扫描线方向
+     *
+     */
+    private int direction=0;
+
     public MovieThread(MainActivity res) {
         MovieThread.res = res;
     }
@@ -42,10 +52,31 @@ public class MovieThread extends Thread {
     public void run() {
             while(1==1&&isEnd==false)
             {
-                res.polygon.nextFrame();
+                this.nextFrame();
                 res.cacheUpdateHandler.sendEmptyMessage(1);
             }
         }
+
+    /**下一帧动画
+     *
+     */
+    public void nextFrame(){
+
+        if(direction==0){
+            lasty-=3;
+            if(lasty<=0){
+                direction=1;
+            }
+        }
+        else{
+            lasty+=3;
+            if(lasty>=res.polygon.getHeight()){
+                direction=0;
+            }
+        }
+        //Log.i("","line at:"+lasty);
+        res.polygon.drawScanLine(lasty);
+    }
 
     public boolean isIsEnd() {
         return isEnd;

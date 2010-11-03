@@ -55,18 +55,10 @@ public class Polygon {
      *
      */
     private Paint p;
-    /**扫描线y值
-     *
-     */
-    private int lasty=0;
     /**上个点的序号
      *
      */
     private int lastPoingIndex=0;
-    /**扫描线方向
-     *
-     */
-    private int direction=0;
     /**多边形的顶点序列
      *
      */
@@ -118,6 +110,8 @@ public class Polygon {
      *
      */
     public void drawScanLine(int y){
+        
+        canvasTemp = new Canvas(getBitmapFromCache());
         //画条直线
         p.setStrokeWidth(3);
         p.setColor(Color.GREEN);
@@ -163,27 +157,13 @@ public class Polygon {
         }
 
     }
-    /**下一帧动画
-     *
-     */
-    public void nextFrame(){
 
-        canvasTemp = new Canvas(getBitmapFromCache());
+    public int getHeight() {
+        return height;
+    }
 
-        if(direction==0){
-            lasty-=3;
-            if(lasty<=0){
-                direction=1;
-            }
-        }
-        else{
-            lasty+=3;
-            if(lasty>=height){
-                direction=0;
-            }
-        }
-        //Log.i("","line at:"+lasty);
-        drawScanLine(lasty);
+    public int getWidth() {
+        return width;
     }
     /**判断点是否在图形内
      *

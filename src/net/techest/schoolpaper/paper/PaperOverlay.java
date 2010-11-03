@@ -18,7 +18,6 @@
 
 package net.techest.schoolpaper.paper;
 
-import net.techest.schoolpaper.*;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;

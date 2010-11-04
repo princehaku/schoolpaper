@@ -25,27 +25,7 @@ import android.graphics.Point;
  * @author princehaku
  */
 public class Paper extends Point{
-    /**
-     *
-     * @param id
-     * @param x 字符串为小数点前+小数点后6位组成 比如30.673103 => 30673103
-     * @param y 字符串为小数点前+小数点后6位组成 比如30.673103 => 30673103
-     * @param title 标题
-     * @param type 纸的类型
-     * @param content 全文
-     * @param deepth
-     * @param addDate
-     */
-    public Paper(int id,int x, int y, PaperType type, String title, String content, int deepth, String addDate) {
-        this.id = id;
-        this.x=x;
-        this.y=y;
-        this.type = type;
-        this.title = title;
-        this.content = content;
-        this.deepth = deepth;
-        this.addDate = addDate;
-    }
+
     private int id;
     /**纸片类型
      *
@@ -68,6 +48,31 @@ public class Paper extends Point{
      *
      */
     private String addDate;
+
+
+    public Paper() {
+
+    }
+    /**
+     * @param id
+     * @param x 字符串为小数点前+小数点后6位组成 比如30.673103 => 30673103
+     * @param y 字符串为小数点前+小数点后6位组成 比如30.673103 => 30673103
+     * @param title 标题
+     * @param type 纸的类型
+     * @param content 全文
+     * @param addDate
+     * @param deepth
+     */
+    public Paper(int id,int x, int y, PaperType type, String title, String content, String addDate,int deepth) {
+        this.id = id;
+        this.x=x;
+        this.y=y;
+        this.type = type;
+        this.title = title;
+        this.content = content;
+        this.addDate = addDate;
+        this.deepth = deepth;
+    }
     
     public String getAddDate() {
         return addDate;

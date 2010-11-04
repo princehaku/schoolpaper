@@ -18,6 +18,7 @@
 
 package net.techest.schoolpaper.work;
 
+import android.app.Activity;
 import net.techest.schoolpaper.MainActivity;
 
 /**用于显示动画
@@ -29,7 +30,7 @@ public class MovieThread extends Thread {
     /**资源
      *
      */
-    private static MainActivity res;
+    private static Activity res;
 
     /**扫描线y值
      *
@@ -41,7 +42,7 @@ public class MovieThread extends Thread {
      */
     private int direction=0;
 
-    public MovieThread(MainActivity res) {
+    public MovieThread(Activity res) {
         MovieThread.res = res;
     }
     /**用于外部强行终止线程
@@ -53,7 +54,7 @@ public class MovieThread extends Thread {
             while(1==1&&isEnd==false)
             {
                 this.nextFrame();
-                res.cacheUpdateHandler.sendEmptyMessage(1);
+                ((MainActivity)res).cacheUpdateHandler.sendEmptyMessage(1);
             }
         }
 
@@ -70,12 +71,12 @@ public class MovieThread extends Thread {
         }
         else{
             lasty+=3;
-            if(lasty>=res.polygon.getHeight()){
+            if(lasty>=((MainActivity)res).polygon.getHeight()){
                 direction=0;
             }
         }
         //Log.i("","line at:"+lasty);
-        res.polygon.drawScanLine(lasty);
+        ((MainActivity)res).polygon.drawScanLine(lasty);
     }
 
     public boolean isIsEnd() {

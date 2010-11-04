@@ -36,14 +36,16 @@ import org.w3c.dom.Node;
  */
 public class XmlToPapers {
 
-    private static Activity res;
+    
     private ArrayList<Paper> papers = new ArrayList();
 
-    public XmlToPapers(Activity res) {
-        this.res = res;
+    private String url;
+    
+    public XmlToPapers(String url) {
+        this.url=url;
     }
 
-    public ArrayList<Paper> parse() {
+    public ArrayList<Paper> parse() throws Exception {
         papers = new ArrayList();
         DocumentBuilderFactory docBuilderFactory = null;
         DocumentBuilder docBuilder = null;
@@ -52,7 +54,7 @@ public class XmlToPapers {
             docBuilderFactory = DocumentBuilderFactory.newInstance();
             docBuilder = docBuilderFactory.newDocumentBuilder();
             //xml file 放到 assets目录中的
-            doc = (Document) docBuilder.parse("http://schoolpaper.techest.net/getPoints.php?");
+            doc = (Document) docBuilder.parse(this.url);
             //root element
             Element root = (Element) doc.getDocumentElement();
             NodeList nodeList = root.getElementsByTagName("paper");
@@ -83,6 +85,10 @@ public class XmlToPapers {
                             String value = nd.getTextContent();
                             paper.setType(PaperType.parseType(Integer.parseInt(value)));
                         }
+                        if (nd.getNodeName().equals("picurl")) {
+                            String value = nd.getTextContent();
+                            paper.setImagePath(value);
+                        }
                         if (nd.getNodeName().equals("content")) {
                             String value = nd.getTextContent();
                             paper.setContent(value);
@@ -100,11 +106,10 @@ public class XmlToPapers {
                 }
             } catch (Exception ex) {
                 Log.i("", "parsing faild :" + ex.getMessage());
-                ((PaperActivity) res).alert.show("错误啦~", "对不起.解析节点失败");
             }
         } catch (Exception ex) {
             Log.i("", "connect server faild :" + ex.getMessage());
-            ((PaperActivity) res).alert.show("错误啦~", "对不起.连接服务器失败 T_T");
+            throw ex;
         }
         
         return papers;

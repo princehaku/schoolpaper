@@ -21,10 +21,12 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
+import java.util.ArrayList;
 import net.techest.schoolpaper.MainActivity;
 import net.techest.schoolpaper.net.HttpConnecter;
 import net.techest.schoolpaper.paper.Paper;
 import net.techest.schoolpaper.paper.PaperType;
+import net.techest.schoolpaper.util.XmlToPapers;
 
 /**得到从服务器返回的数据
  *
@@ -36,12 +38,19 @@ public class FetchThread extends Thread {
      *
      */
     private static Activity res;
-    int pointx;
-    int pointy;
-    int rectorw;
-    int rectorh;
-    public FetchThread(Activity res,int x,int y,int w,int h) {
+    
+    double pointx1;
+    double pointy1;
+    double pointx2;
+    double pointy2;
+    
+    public FetchThread(Activity res,double x1,double x2,double y1,double y2) {
         FetchThread.res = res;
+        //换算成标准的XX.XXXXXXX
+        this.pointx1=x1/1000000;
+        this.pointy1=y1/1000000;
+        this.pointx2=x2/1000000;
+        this.pointy2=y2/1000000;
     }
     /**从服务器获取数据并显示
      *
@@ -50,7 +59,15 @@ public class FetchThread extends Thread {
     public void run() {
         HttpConnecter c=new HttpConnecter();
         try {
-            addOverlay(new Paper(1, 30673390,104140412, PaperType.QITA,"标题党", "不需要内容","2011-12-12",0));
+            XmlToPapers xp=new XmlToPapers("http://schoolpaper.techest.net/getPoints.php?x1="+this.pointx1
+                    +"&x2="+this.pointx2+"&y1="+this.pointy1+"&y2="+this.pointy2);
+            Log.i("", "URL IS :http://schoolpaper.techest.net/getPoints.php?x1="+this.pointx1
+                    +"&x2="+this.pointx2+"&y1="+this.pointy1+"&y2="+this.pointy2);
+            ArrayList<Paper> papers = xp.parse();
+            for(int i=0;i<papers.size();i++){
+                Paper p=papers.get(i);
+                addOverlay(p);
+            }
             //c.get("http://schoolpaper.techest.net/getPoints.php?x=123&y=123&w=123&h=123", "utf8");
         } catch (Exception ex) {
             Log.i("","Error connecting Server :"+ex.getMessage());

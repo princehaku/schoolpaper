@@ -3,7 +3,7 @@
      package="net.techest.schoolpaper">
     <application>
         <uses-library android:name="com.google.android.maps" />
-         <activity android:name=".MainActivity" android:label="校纸">
+         <activity android:name=".PaperActivity" android:label="校纸">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

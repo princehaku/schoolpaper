@@ -17,6 +17,7 @@
  */
 package net.techest.schoolpaper.work;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
@@ -34,9 +35,12 @@ public class FetchThread extends Thread {
     /**资源
      *
      */
-    private static MainActivity res;
-
-    public FetchThread(MainActivity res) {
+    private static Activity res;
+    int pointx;
+    int pointy;
+    int rectorw;
+    int rectorh;
+    public FetchThread(Activity res,int x,int y,int w,int h) {
         FetchThread.res = res;
     }
     /**从服务器获取数据并显示
@@ -46,13 +50,13 @@ public class FetchThread extends Thread {
     public void run() {
         HttpConnecter c=new HttpConnecter();
         try {
-            c.get("http://schoolpaper.techest.net/getPoints.php?", "utf8");
-            
+            addOverlay(new Paper(1, 30673390,104140412, PaperType.QITA,"标题党", "不需要内容","2011-12-12",0));
+            //c.get("http://schoolpaper.techest.net/getPoints.php?x=123&y=123&w=123&h=123", "utf8");
         } catch (Exception ex) {
             Log.i("","Error connecting Server :"+ex.getMessage());
-            res.alert.show("错误啦~", "对不起.连接服务器失败 T_T");
+            ((MainActivity)res).alert.show("错误啦~", "对不起.连接服务器失败 T_T");
         }
-        res.finishHandler.sendEmptyMessage(1);
+        ((MainActivity)res).finishHandler.sendEmptyMessage(1);
     }
     /**增加一个纸片到地图视图
      *
@@ -67,6 +71,6 @@ public class FetchThread extends Thread {
         ble.putString("description",p.getContent());
         ble.putString("deepth",""+p.getDeepth());
         msg.setData(ble);
-        res.mapPointAddHandler.sendMessage(msg);
+        ((MainActivity)res).mapPointAddHandler.sendMessage(msg);
     }
 }

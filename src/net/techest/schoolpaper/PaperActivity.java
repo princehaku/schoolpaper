@@ -19,8 +19,13 @@
 package net.techest.schoolpaper;
 
 import android.app.Activity;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
+import java.util.ArrayList;
+import net.techest.schoolpaper.paper.Paper;
 import net.techest.schoolpaper.util.XmlToPapers;
 
 /**
@@ -37,9 +42,14 @@ public class PaperActivity extends Activity {
         super.onCreate(icicle);
         alert=new AlertWindow(this);
         setContentView(R.layout.paperview);
-        XmlToPapers xp=new XmlToPapers(this);
+        XmlToPapers xp=new XmlToPapers("http://schoolpaper.techest.net/getPoints.php?");
+        ArrayList<Paper> parse = xp.parse();
         ((TextView)findViewById(R.id.cc2)).setScrollContainer(true);
-        ((TextView)findViewById(R.id.cc2)).setText("ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ToDo add your GUI initialization code here    ");
+        ((TextView)findViewById(R.id.title)).setText(""+parse.get(0).getTitle());
+        ((TextView)findViewById(R.id.date)).setText(""+parse.get(0).getAddDate());
+        ((TextView)findViewById(R.id.cc2)).setText(parse.get(0).getContent());
+        Log.v("","http://schoolpaper.techest.net/"+parse.get(0).getImagePath());
+        ((ImageView)findViewById(R.id.thumb)).setImageURI(Uri.parse("http://schoolpaper.techest.net"+parse.get(0).getImagePath()));
         // ToDo add your GUI initialization code here
         xp.parse();
     }

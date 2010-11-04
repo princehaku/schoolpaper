@@ -13,5 +13,21 @@ public enum PaperType {
     BAIKE,
     XINWEN,
     SUIPIAN,
-    QITA
+    QITA;
+
+
+    public static PaperType parseType(int parseInt) {
+        switch(parseInt)
+        {
+            case 0:
+                return QITA;
+            case 1:
+                return BAIKE;
+            case 2:
+                return XINWEN;
+            case 3:
+                return SUIPIAN;
+        }
+        return QITA;
+    }
 }

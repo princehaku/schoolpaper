@@ -18,6 +18,7 @@
 
 package net.techest.schoolpaper;
 
+import android.graphics.Color;
 import net.techest.schoolpaper.work.MovieThread;
 import net.techest.schoolpaper.work.FetchThread;
 import android.graphics.drawable.Drawable;
@@ -79,8 +80,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
         map.setFocusable(true);
         map.setClickable(true);
         //根据map虚拟化一张画布填充至画布层
-        map.setDrawingCacheEnabled(true);
-        renderMapContainer.setImageBitmap(map.getDrawingCache());
+        map.setDrawingCacheEnabled(false);
         renderMapContainer.setVisibility(View.INVISIBLE);
         //这里是圈圈的点击事件
         ((Button)findViewById(R.id.quan)).setOnClickListener(
@@ -93,9 +93,17 @@ public class MainActivity extends MapActivity implements OnTouchListener{
                 }
                 map.setClickable(false);
                 renderMapContainer.setVisibility(View.INVISIBLE);
-                polygon=new Polygon();
-                renderMapContainer.setImageBitmap(map.getDrawingCache());
+                //清空已经有的坐标
+                map.getOverlays().clear();
+                //更新下画布
                 PointStatu.reset();
+                if(polygon==null){
+                    polygon=new Polygon();
+                }else
+                    {
+                    renderMapContainer.setImageBitmap(map.getDrawingCache());
+                    polygon=new Polygon();
+                }
                 //使画布显示 覆盖在mapview之上 开始工作
                 renderMapContainer.setVisibility(View.VISIBLE);
                 renderMapContainer.setLongClickable(true);
@@ -130,33 +138,35 @@ public class MainActivity extends MapActivity implements OnTouchListener{
         switch(event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
-                PointStatu.lastX=PointStatu.X;
-                PointStatu.lastY=PointStatu.Y;
+                PointStatu.updatePoint(PointStatu.X,PointStatu.Y);
                 polygon.addPoint(PointStatu.lastX, PointStatu.lastY);
                 break;
             case MotionEvent.ACTION_MOVE:
                 //如果当前点的x或者y范围超过5且5像素内无其他像素则画图并设置到新点
                 if((Math.abs(PointStatu.Y-PointStatu.lastY)>5||Math.abs(PointStatu.X-PointStatu.lastX)>5)){
-                    PointStatu.lastX=PointStatu.X;
-                    PointStatu.lastY=PointStatu.Y;
+                    PointStatu.updatePoint(PointStatu.X,PointStatu.Y);
                     polygon.addPoint(PointStatu.lastX, PointStatu.lastY);
                     //更新图像
                     renderMapContainer.setImageBitmap(polygon.getBitmap());
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                PointStatu.updatePoint(PointStatu.X,PointStatu.Y);
                 renderMapContainer.setLongClickable(false);
                 map.setClickable(false);
                 //释放的时候计算坐标成地理坐标.上传给服务器
-                GeoPoint p1= map.getProjection().fromPixels(0,0);
-                GeoPoint p2= map.getProjection().fromPixels(map.getWidth(),map.getHeight());
+                GeoPoint p1= map.getProjection().fromPixels((int)PointStatu.maxX,(int)PointStatu.maxY);
+                GeoPoint p2= map.getProjection().fromPixels((int)PointStatu.minX,(int)PointStatu.minY);
+                GeoPoint temp = new GeoPoint(0, 0);
                 //mTextView01.setText(p1.toString());
                 //画封闭线
                 polygon.enClose();
                 //开始动画
                 t=new MovieThread(this);
                 t.start();
-                f=new FetchThread(this,p1.getLatitudeE6(),p2.getLatitudeE6(),p2.getLatitudeE6()-p1.getLatitudeE6(),p2.getLongitudeE6()-p1.getLongitudeE6());
+                //从服务器获取信息
+                f=new FetchThread(this,p1.getLatitudeE6()-temp.getLatitudeE6(),
+                        p2.getLatitudeE6()-temp.getLatitudeE6(),p2.getLongitudeE6()-temp.getLongitudeE6(),p1.getLongitudeE6()-temp.getLongitudeE6());
                 f.start();
                 break;
         }
@@ -187,6 +197,8 @@ public class MainActivity extends MapActivity implements OnTouchListener{
             while(t.isAlive()){
                 Log.i("","Wait for Movie Thread to end");
             }
+            f=null;
+            t=null;
             PointStatu.reset();
             renderMapContainer.setVisibility(View.INVISIBLE);
             //-------------
@@ -209,7 +221,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
             List<Overlay> mapOverlays = map.getOverlays();
             Drawable drawable = getResources().getDrawable(R.drawable.paper0);
             PaperOverlay itemizedoverlay = new PaperOverlay(drawable,map.getContext());
-            GeoPoint point = new GeoPoint(30673390,104140412);
+            GeoPoint point = new GeoPoint(Integer.parseInt(x),Integer.parseInt(y));
             OverlayItem overlayitem = new OverlayItem(point, title, description);
             itemizedoverlay.addOverlay(overlayitem);
             mapOverlays.add(itemizedoverlay);

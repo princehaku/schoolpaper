@@ -95,7 +95,7 @@ public class Polygon {
     /**得到缓冲层 
      *@return Bitmap
      */
-    private Bitmap getBitmapFromCache(){
+    public Bitmap getBitmapFromCache(){
         //第一次将原始位图写入缓冲区
         if(cacheBitmap==null){
             Log.i("","CacheBitmap Created");

@@ -15,7 +15,6 @@
  *  Created on : 2010-10-26, 23:30:30
  *  Author     : princehaku
  */
-
 package net.techest.schoolpaper;
 
 /**按下屏幕的点的状态
@@ -24,15 +23,40 @@ package net.techest.schoolpaper;
  */
 public class PointStatu {
 
-    public static float lastX=0f;
-    public static float lastY=0f;
-    public static float X=0f;
-    public static float Y=0f;
-    
+    public static float lastX = 0f;
+    public static float lastY = 0f;
+    public static float X = 0f;
+    public static float Y = 0f;
+    public static float minX = 320f;
+    public static float maxX = 0f;
+    public static float minY = 480f;
+    public static float maxY = 0f;
+
     static void reset() {
-            PointStatu.lastX=0f;
-            PointStatu.lastY=0f;
-            PointStatu.X=0f;
-            PointStatu.Y=0f;
+        PointStatu.lastX = 0f;
+        PointStatu.lastY = 0f;
+        PointStatu.X = 0f;
+        PointStatu.Y = 0f;
+    }
+    /**更新点状态
+     *
+     * @param x
+     * @param y
+     */
+    static void updatePoint(float x, float y) {
+        PointStatu.lastX = PointStatu.X;
+        if(PointStatu.X>maxX){
+            maxX=PointStatu.X;
+        }
+        if(PointStatu.X<minX){
+            minX=PointStatu.X;
+        }
+        PointStatu.lastY = PointStatu.Y;
+        if(PointStatu.Y>maxY){
+            maxY=PointStatu.Y;
+        }
+        if(PointStatu.Y<minY){
+            minY=PointStatu.Y;
+        }
     }
 }

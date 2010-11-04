@@ -29,10 +29,13 @@ import net.techest.schoolpaper.util.XmlToPapers;
  */
 public class PaperActivity extends Activity {
 
+    //警告窗口
+    public AlertWindow alert;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        alert=new AlertWindow(this);
         setContentView(R.layout.paperview);
         XmlToPapers xp=new XmlToPapers(this);
         ((TextView)findViewById(R.id.cc2)).setScrollContainer(true);

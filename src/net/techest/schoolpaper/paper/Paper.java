@@ -36,6 +36,10 @@ public class Paper extends Point{
      *
      */
     private String title;
+    /**图片路径
+     *
+     */
+    private String imagePath;
     /**内容
      *
      */
@@ -63,11 +67,12 @@ public class Paper extends Point{
      * @param addDate
      * @param deepth
      */
-    public Paper(int id,int x, int y, PaperType type, String title, String content, String addDate,int deepth) {
+    public Paper(int id,int x, int y, PaperType type, String title,String imagePath, String content, String addDate,int deepth) {
         this.id = id;
         this.x=x;
         this.y=y;
         this.type = type;
+        this.imagePath=imagePath;
         this.title = title;
         this.content = content;
         this.addDate = addDate;
@@ -82,6 +87,13 @@ public class Paper extends Point{
         this.addDate = addDate;
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
     public int getDeepth() {
         return deepth;
     }

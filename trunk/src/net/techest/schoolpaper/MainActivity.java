@@ -121,6 +121,10 @@ public class MainActivity extends MapActivity implements OnTouchListener{
      */
     public boolean onTouch(View v, MotionEvent event) {
         mTextView01.setText(event.getAction()+"-"+event.getPressure()+"");
+        //在线程运行时禁止点击
+        if(t!=null&&t.isAlive()){
+                    return false;
+        }
         PointStatu.X=event.getX();
         PointStatu.Y=event.getY();
         switch(event.getAction())
@@ -152,7 +156,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
                 //开始动画
                 t=new MovieThread(this);
                 t.start();
-                f=new FetchThread(this);
+                f=new FetchThread(this,p1.getLatitudeE6(),p2.getLatitudeE6(),p2.getLatitudeE6()-p1.getLatitudeE6(),p2.getLongitudeE6()-p1.getLongitudeE6());
                 f.start();
                 break;
         }
@@ -189,7 +193,9 @@ public class MainActivity extends MapActivity implements OnTouchListener{
             map.setClickable(true);
         }
     };
-
+    /**在地图上增加信息点
+     *
+     */
     public Handler mapPointAddHandler=new Handler() {
         @Override
         public void handleMessage(Message msg) {

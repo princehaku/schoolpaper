@@ -12,7 +12,13 @@ public final class R {
     }
     public static final class drawable {
         public static final int logo=0x7f020000;
-        public static final int paper0=0x7f020001;
+        public static final int overlay0=0x7f020001;
+        public static final int overlay1=0x7f020002;
+        public static final int overlay2=0x7f020003;
+        public static final int overlay3=0x7f020004;
+        public static final int overlay4=0x7f020005;
+        public static final int overlay5=0x7f020006;
+        public static final int paper0=0x7f020007;
     }
     public static final class id {
         public static final int TextView01=0x7f050004;

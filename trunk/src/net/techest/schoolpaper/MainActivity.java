@@ -18,6 +18,7 @@
 
 package net.techest.schoolpaper;
 
+import net.techest.schoolpaper.graph.Polygon;
 import android.graphics.Color;
 import net.techest.schoolpaper.work.MovieThread;
 import net.techest.schoolpaper.work.FetchThread;
@@ -220,7 +221,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
             String deepth =(String)Message.obtain(msg).getData().get("deepth");
             mTextView01.setText(title.toString());
             List<Overlay> mapOverlays = map.getOverlays();
-            Drawable drawable = getResources().getDrawable(R.drawable.paper0);
+            Drawable drawable = getResources().getDrawable(R.drawable.overlay3);
             PaperOverlay itemizedoverlay = new PaperOverlay(drawable,map.getContext());
             GeoPoint point = new GeoPoint(Integer.parseInt(x),Integer.parseInt(y));
             OverlayItem overlayitem = new OverlayItem(point, title, description);

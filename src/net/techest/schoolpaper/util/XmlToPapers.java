@@ -17,12 +17,10 @@
  */
 package net.techest.schoolpaper.util;
 
-import android.app.Activity;
 import android.util.Log;
 import java.util.ArrayList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import net.techest.schoolpaper.PaperActivity;
 import net.techest.schoolpaper.paper.Paper;
 import net.techest.schoolpaper.paper.PaperType;
 import org.w3c.dom.Document;

@@ -21,11 +21,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Html;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AbsoluteLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import java.io.InputStream;
@@ -33,7 +36,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import net.techest.schoolpaper.paper.Paper;
-import net.techest.schoolpaper.util.XmlToPapers;
 
 /**
  *
@@ -47,8 +49,7 @@ public class PaperActivity extends Activity {
      *
      */
     private static int nowIndex = 0;
-    
-    private boolean showBigPic=false;
+    private boolean showBigPic = false;
 
     /** Called when the activity is first created. */
     @Override
@@ -57,26 +58,53 @@ public class PaperActivity extends Activity {
         alert = new AlertWindow(this);
         setContentView(R.layout.paperview);
         // ToDo add your GUI initialization code here
-        setViewContent(nowIndex);
+        setViewContent(this.getIdxByid(PublicData.nowPaperId));
     }
 
     private void setViewContent(int idx) {
         ArrayList<Paper> papers = PublicData.papers;
+        String deepth = papers.get(idx).getDeepth() + "";
+        //处理色深
+        Drawable drawable = getResources().getDrawable(R.drawable.bg0);
+
+        if (deepth.equals("1")) {
+            drawable = getResources().getDrawable(R.drawable.bg1);
+        }
+        if (deepth.equals("2")) {
+            drawable = getResources().getDrawable(R.drawable.bg2);
+        }
+        if (deepth.equals("3")) {
+            drawable = getResources().getDrawable(R.drawable.bg3);
+        }
+        if (deepth.equals("4")) {
+            drawable = getResources().getDrawable(R.drawable.bg4);
+        }
+        if (deepth.equals("5")) {
+            drawable = getResources().getDrawable(R.drawable.bg5);
+        }
+        ((AbsoluteLayout)findViewById(R.id.widget46)).setBackgroundDrawable(drawable);
+        Log.i("", "" + papers.size());
+
         String imgurl = "http://schoolpaper.techest.net" + papers.get(idx).getImagePath();
         ((TextView) findViewById(R.id.cc2)).setScrollContainer(true);
         ((TextView) findViewById(R.id.title)).setText("" + papers.get(idx).getTitle());
-        ((TextView) findViewById(R.id.date)).setText("" + papers.get(idx).getAddDate());
-        ((TextView) findViewById(R.id.cc2)).setText(papers.get(idx).getContent());
-        Log.v("", "http://schoolpaper.techest.net/" + papers.get(idx).getImagePath());
-        ImageView image=((ImageView) findViewById(R.id.thumb));
+        ((TextView) findViewById(R.id.date)).setText("" + papers.get(idx).getPaperDate());
+        Spanned text = Html.fromHtml(papers.get(idx).getContent());
+        ((TextView) findViewById(R.id.cc2)).setText(text);
+        Log.v("", "http://schoolpaper.techest.net" + papers.get(idx).getImagePath());
+        ImageView image = ((ImageView) findViewById(R.id.thumb));
         image.setOnClickListener(new OnClickListener() {
+
             public void onClick(View arg0) {
-                showBigPic=true;
+                showBigPic = true;
                 showBigPic();
             }
         });
     }
 
+    /**全屏显示图片
+     *
+     */
     private void showBigPic() {
         ArrayList<Paper> papers = PublicData.papers;
         String imgurl = "http://schoolpaper.techest.net" + papers.get(nowIndex).getImagePath();
@@ -93,7 +121,7 @@ public class PaperActivity extends Activity {
                 public void onClick(View arg0) {
                     setContentView(R.layout.paperview);
                     setViewContent(nowIndex);
-                    showBigPic=false;
+                    showBigPic = false;
                 }
             });
             setContentView(image);
@@ -109,14 +137,23 @@ public class PaperActivity extends Activity {
     @Override
     public void onPause() {
         super.onPause();
-        if(this.showBigPic==true){
-            setContentView(R.layout.paperview);
-            setViewContent(nowIndex);
-            return;
-        }
         Intent intent = new Intent();
         intent.setClass(this, MainActivity.class);
         this.startActivity(intent);
         this.finish();
+    }
+
+    /**根据id得到序号
+     *
+     * @param nowPaperId
+     * @return
+     */
+    private int getIdxByid(int nowPaperId) {
+        for (int i = 0; i < PublicData.papers.size(); i++) {
+            if (nowPaperId == PublicData.papers.get(i).getId()) {
+                return i;
+            }
+        }
+        return 0;
     }
 }

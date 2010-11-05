@@ -91,9 +91,9 @@ public class XmlToPapers {
                             String value = nd.getTextContent();
                             paper.setContent(value);
                         }
-                        if (nd.getNodeName().equals("adddate")) {
+                        if (nd.getNodeName().equals("paperdate")) {
                             String value = nd.getTextContent();
-                            paper.setAddDate(value);
+                            paper.setPaperDate(value);
                         }
                         if (nd.getNodeName().equals("deepth")) {
                             String value = nd.getTextContent();

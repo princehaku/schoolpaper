@@ -169,7 +169,7 @@ public class Polygon {
      *
      */
     public boolean isInPolygon(double x,double y){
-        
+        Log.i("", "check x:"+x+" y:"+y);
         return true;
     }
     /**用最后一个绘图的点更新缓冲区内的图像

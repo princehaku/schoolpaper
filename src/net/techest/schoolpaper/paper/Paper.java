@@ -48,10 +48,10 @@ public class Paper extends Point{
      *
      */
     private int deepth;
-    /**增加纸片的时间
+    /**纸片的时间
      *
      */
-    private String addDate;
+    private String paperDate;
 
 
     public Paper() {
@@ -64,7 +64,7 @@ public class Paper extends Point{
      * @param title 标题
      * @param type 纸的类型
      * @param content 全文
-     * @param addDate
+     * @param paperDate
      * @param deepth
      */
     public Paper(int id,int x, int y, PaperType type, String title,String imagePath, String content, String addDate,int deepth) {
@@ -75,16 +75,16 @@ public class Paper extends Point{
         this.imagePath=imagePath;
         this.title = title;
         this.content = content;
-        this.addDate = addDate;
+        this.paperDate = addDate;
         this.deepth = deepth;
     }
     
-    public String getAddDate() {
-        return addDate;
+    public String getPaperDate() {
+        return paperDate;
     }
 
-    public void setAddDate(String addDate) {
-        this.addDate = addDate;
+    public void setPaperDate(String paperDate) {
+        this.paperDate = paperDate;
     }
 
     public String getImagePath() {

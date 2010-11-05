@@ -16,7 +16,7 @@
  *  Author     : princehaku
  */
 
-package net.techest.schoolpaper;
+package net.techest.schoolpaper.graph;
 
 import android.graphics.Point;
 

@@ -19,6 +19,7 @@
 package net.techest.schoolpaper;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -35,30 +36,38 @@ import net.techest.schoolpaper.util.XmlToPapers;
 public class PaperActivity extends Activity {
     //警告窗口
     public AlertWindow alert;
+    /**当前查看的纸片序号
+     *
+     */
+    private static int nowIndex=0;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         alert=new AlertWindow(this);
         setContentView(R.layout.paperview);
-        XmlToPapers xp=new XmlToPapers("http://schoolpaper.techest.net/getPoints.php?x1=30.672509&x2=30.673551&y1=104.140208&y2=104.141324");
-        ArrayList<Paper> papers=null;
-        try {
-            papers = xp.parse();
-        } catch (Exception ex) {
-
-        }
-        ((TextView)findViewById(R.id.cc2)).setScrollContainer(true);
-        ((TextView)findViewById(R.id.title)).setText(""+papers.get(0).getTitle());
-        ((TextView)findViewById(R.id.date)).setText(""+papers.get(0).getAddDate());
-        ((TextView)findViewById(R.id.cc2)).setText(papers.get(0).getContent());
-        Log.v("","http://schoolpaper.techest.net/"+papers.get(0).getImagePath());
-        ((ImageView)findViewById(R.id.thumb)).setImageURI(Uri.parse("http://schoolpaper.techest.net"+papers.get(0).getImagePath()));
         // ToDo add your GUI initialization code here
+        setViewContent(nowIndex);
     }
+    private void setViewContent(int idx){
+        ArrayList<Paper> papers=PublicData.papers;
+        ((TextView)findViewById(R.id.cc2)).setScrollContainer(true);
+        ((TextView)findViewById(R.id.title)).setText(""+papers.get(idx).getTitle());
+        ((TextView)findViewById(R.id.date)).setText(""+papers.get(idx).getAddDate());
+        ((TextView)findViewById(R.id.cc2)).setText(papers.get(idx).getContent());
+        Log.v("","http://schoolpaper.techest.net/"+papers.get(idx).getImagePath());
+        ((ImageView)findViewById(R.id.thumb)).setImageURI(Uri.parse("http://schoolpaper.techest.net"+papers.get(idx).getImagePath()));
+    }
+    /**按下后退的时候返回到主界面
+     *
+     */
     @Override
     public void onPause(){
-        this.finish();
+      super.onPause();
+      Intent intent = new Intent();
+      intent.setClass(this, MainActivity.class);
+      this.startActivity(intent);
+      this.finish();
     }
 
 }

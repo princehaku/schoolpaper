@@ -40,6 +40,8 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import java.util.List;
+import net.techest.schoolpaper.MainActivity;
+import net.techest.schoolpaper.paper.Paper;
 import net.techest.schoolpaper.paper.PaperOverlay;
 
 /**
@@ -74,7 +76,11 @@ public class MainActivity extends MapActivity implements OnTouchListener{
         renderMapContainer.setOnTouchListener((OnTouchListener)this);
         //初始化地图
         map = (MapView)findViewById(R.id.my_map);
-        map.getController().setCenter(new GeoPoint(30673894,104143757));
+        if(PublicData.centerPoint==null){
+            map.getController().setCenter(new GeoPoint(30673894,104143757));
+        }else{
+            map.getController().setCenter(PublicData.centerPoint);
+        }
         map.getController().setZoom(18);
         map.setBuiltInZoomControls(true);
         map.setLongClickable(true);
@@ -83,7 +89,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
         //根据map虚拟化一张画布填充至画布层
         map.setDrawingCacheEnabled(false);
         renderMapContainer.setVisibility(View.INVISIBLE);
-        //这里是圈圈的点击事件
+        //绑定圈圈的点击事件
         ((Button)findViewById(R.id.quan)).setOnClickListener(
 
          new OnClickListener(){
@@ -111,6 +117,13 @@ public class MainActivity extends MapActivity implements OnTouchListener{
             }
             }
         );
+        //如果存在数据 重绘标点
+            if(PublicData.papers!=null){
+                for(int i=0;i<PublicData.papers.size();i++){
+                    Paper p=PublicData.papers.get(i);
+                    addOverlay(p);
+                }
+            }
         }
         
     /**必须重载此方法
@@ -152,6 +165,8 @@ public class MainActivity extends MapActivity implements OnTouchListener{
                 }
                 break;
             case MotionEvent.ACTION_UP:
+                //保存地图中心坐标到公共数据区
+                PublicData.centerPoint=map.getMapCenter();
                 PointStatu.updatePoint(PointStatu.X,PointStatu.Y);
                 renderMapContainer.setLongClickable(false);
                 map.setClickable(false);
@@ -213,21 +228,54 @@ public class MainActivity extends MapActivity implements OnTouchListener{
     public Handler mapPointAddHandler=new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            String id =(String)Message.obtain(msg).getData().get("id");
             String x =(String)Message.obtain(msg).getData().get("x");
             String y =(String)Message.obtain(msg).getData().get("y");
             String title =(String)Message.obtain(msg).getData().get("title");
             String type =(String)Message.obtain(msg).getData().get("type");
-            String description =(String)Message.obtain(msg).getData().get("description");
             String deepth =(String)Message.obtain(msg).getData().get("deepth");
             mTextView01.setText(title.toString());
             List<Overlay> mapOverlays = map.getOverlays();
-            Drawable drawable = getResources().getDrawable(R.drawable.overlay3);
-            PaperOverlay itemizedoverlay = new PaperOverlay(drawable,map.getContext());
+            //处理色深
+            Drawable drawable = getResources().getDrawable(R.drawable.overlay0);
+            
+            if(deepth.equals("1")){
+                drawable = getResources().getDrawable(R.drawable.overlay1);
+            }
+            if(deepth.equals("2")){
+                drawable = getResources().getDrawable(R.drawable.overlay2);
+            }
+            if(deepth.equals("3")){
+                drawable = getResources().getDrawable(R.drawable.overlay3);
+            }
+            if(deepth.equals("4")){
+                drawable = getResources().getDrawable(R.drawable.overlay4);
+            }
+            if(deepth.equals("5")){
+                drawable = getResources().getDrawable(R.drawable.overlay5);
+            }
+            PaperOverlay itemizedoverlay = new PaperOverlay(drawable,map.getContext(),MainActivity.this,Integer.parseInt(id));
             GeoPoint point = new GeoPoint(Integer.parseInt(x),Integer.parseInt(y));
-            OverlayItem overlayitem = new OverlayItem(point, title, description);
+            OverlayItem overlayitem = new OverlayItem(point, title, "");
             itemizedoverlay.addOverlay(overlayitem);
             mapOverlays.add(itemizedoverlay);
             super.handleMessage(msg);
         }
     };
+
+    /**增加一个纸片到地图视图
+     *
+     */
+    private void addOverlay(Paper p){
+        Message msg = new Message();
+        Bundle ble = new Bundle();
+        ble.putString("id",""+p.getId());
+        ble.putString("x",""+p.getX());
+        ble.putString("y",""+p.getY());
+        ble.putString("title",p.getTitle());
+        ble.putString("type",p.getType().name());
+        ble.putString("deepth",""+p.getDeepth());
+        msg.setData(ble);
+        this.mapPointAddHandler.sendMessage(msg);
+    }
 }

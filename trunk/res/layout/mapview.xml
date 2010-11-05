@@ -30,9 +30,9 @@
 />
 <Button
     android:id="@+id/quan"
-    android:layout_width="76px"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:text="圈圈"
+    android:text="画圈圈-圈纸片"
     android:layout_marginBottom="1px"
     android:layout_marginLeft="1px"
     android:layout_below="@+id/my_map"

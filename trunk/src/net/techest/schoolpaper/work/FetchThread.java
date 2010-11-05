@@ -21,11 +21,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
-import java.util.ArrayList;
 import net.techest.schoolpaper.MainActivity;
-import net.techest.schoolpaper.net.HttpConnecter;
+import net.techest.schoolpaper.PublicData;
 import net.techest.schoolpaper.paper.Paper;
-import net.techest.schoolpaper.paper.PaperType;
 import net.techest.schoolpaper.util.XmlToPapers;
 
 /**得到从服务器返回的数据
@@ -57,15 +55,15 @@ public class FetchThread extends Thread {
      */
     @Override
     public void run() {
-        HttpConnecter c=new HttpConnecter();
+        //HttpConnecter c=new HttpConnecter();
         try {
             XmlToPapers xp=new XmlToPapers("http://schoolpaper.techest.net/getPoints.php?x1="+this.pointx1
                     +"&x2="+this.pointx2+"&y1="+this.pointy1+"&y2="+this.pointy2);
             Log.i("", "URL IS :http://schoolpaper.techest.net/getPoints.php?x1="+this.pointx1
                     +"&x2="+this.pointx2+"&y1="+this.pointy1+"&y2="+this.pointy2);
-            ArrayList<Paper> papers = xp.parse();
-            for(int i=0;i<papers.size();i++){
-                Paper p=papers.get(i);
+            PublicData.papers = xp.parse();
+            for(int i=0;i<PublicData.papers.size();i++){
+                Paper p=PublicData.papers.get(i);
                 addOverlay(p);
             }
             //c.get("http://schoolpaper.techest.net/getPoints.php?x=123&y=123&w=123&h=123", "utf8");
@@ -78,14 +76,14 @@ public class FetchThread extends Thread {
     /**增加一个纸片到地图视图
      *
      */
-    void addOverlay(Paper p){
+    private void addOverlay(Paper p){
         Message msg = new Message();
         Bundle ble = new Bundle();
+        ble.putString("id",""+p.getId());
         ble.putString("x",""+p.getX());
         ble.putString("y",""+p.getY());
         ble.putString("title",p.getTitle());
         ble.putString("type",p.getType().name());
-        ble.putString("description",p.getContent());
         ble.putString("deepth",""+p.getDeepth());
         msg.setData(ble);
         ((MainActivity)res).mapPointAddHandler.sendMessage(msg);

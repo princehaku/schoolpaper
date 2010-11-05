@@ -20,10 +20,13 @@ package net.techest.schoolpaper.paper;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
 import java.util.ArrayList;
+import net.techest.schoolpaper.MainActivity;
+import net.techest.schoolpaper.PaperActivity;
 
 /**地图上的标注
  *
@@ -51,10 +54,9 @@ public class PaperOverlay extends ItemizedOverlay{
     @Override
     protected boolean onTap(int index) {
       OverlayItem item = mOverlays.get(index);
-      AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-      dialog.setTitle(item.getTitle());
-      dialog.setMessage(item.getSnippet());
-      dialog.show();
+      Intent intent = new Intent();
+      intent.setClass(mContext, PaperActivity.class);
+      mContext.startActivity(intent);
       return true;
     }
 

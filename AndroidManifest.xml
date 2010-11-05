@@ -9,6 +9,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+         <activity android:name=".PaperActivity" android:label="校纸">
+            <intent-filter>
+                <action android:name="android.intent.action.Paper"/>
+            </intent-filter>
+        </activity>
     </application>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"></uses-permission>
     <uses-permission android:name="android.permission.INTERNET"></uses-permission>

@@ -18,8 +18,8 @@
 
 package net.techest.schoolpaper;
 
+import android.content.Context;
 import net.techest.schoolpaper.graph.Polygon;
-import android.graphics.Color;
 import net.techest.schoolpaper.work.MovieThread;
 import net.techest.schoolpaper.work.FetchThread;
 import android.graphics.drawable.Drawable;
@@ -31,6 +31,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,7 +41,6 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import java.util.List;
-import net.techest.schoolpaper.MainActivity;
 import net.techest.schoolpaper.paper.Paper;
 import net.techest.schoolpaper.paper.PaperOverlay;
 
@@ -50,9 +50,11 @@ import net.techest.schoolpaper.paper.PaperOverlay;
  */
 public class MainActivity extends MapActivity implements OnTouchListener{
 
-    private MapView map;
+    public MapView map;
     //测试用的文本框
-    private TextView mTextView01;
+    private TextView infoBar;
+    //测试用的文本框
+    private TextView searchText;
     //多边形
     public Polygon polygon;
     //地图上的渲染层
@@ -69,7 +71,8 @@ public class MainActivity extends MapActivity implements OnTouchListener{
         super.onCreate(icicle);
         alert=new AlertWindow(this);
         setContentView(R.layout.mapview);
-        mTextView01 = (TextView) findViewById(R.id.TextView01);
+        searchText=(TextView) findViewById(R.id.searchtext);
+        infoBar = (TextView) findViewById(R.id.infoBar);
         //初始化圈圈的画布
         renderMapContainer=(ImageView)findViewById(R.id.render_map);
         renderMapContainer.setLongClickable(true);
@@ -77,7 +80,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
         //初始化地图
         map = (MapView)findViewById(R.id.my_map);
         if(PublicData.centerPoint==null){
-            map.getController().setCenter(new GeoPoint(30673894,104143757));
+            map.getController().setCenter(new GeoPoint(30673860,104141635));
         }else{
             map.getController().setCenter(PublicData.centerPoint);
         }
@@ -95,6 +98,9 @@ public class MainActivity extends MapActivity implements OnTouchListener{
          new OnClickListener(){
 
             public void onClick(View v) {
+                renderMapContainer.setFocusableInTouchMode(true);
+                renderMapContainer.setFocusable(true);
+                renderMapContainer.requestFocus();
                 if(f!=null&&f.isAlive()){
                     return;
                 }
@@ -117,11 +123,29 @@ public class MainActivity extends MapActivity implements OnTouchListener{
             }
             }
         );
+        //绑定搜索按钮的点击事件
+        ((Button)findViewById(R.id.search)).setOnClickListener(
+
+         new OnClickListener(){
+
+            public void onClick(View arg0) {
+                if(searchText.getText().equals("")){
+                    alert.show("注意", "请输入关键词");
+                    return;
+                }
+                alert.show("提示", "请稍后 正在为您搜索纸片");
+                //清空已经有的坐标
+                map.getOverlays().clear();
+                //从服务器获取信息
+                f=new FetchThread(MainActivity.this,searchText.getText().toString());
+                f.start();
+            }
+        });
         //如果存在数据 重绘标点
             if(PublicData.papers!=null){
                 for(int i=0;i<PublicData.papers.size();i++){
                     Paper p=PublicData.papers.get(i);
-                    addOverlay(p);
+                        addOverlay(p);
                 }
             }
         }
@@ -142,7 +166,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
      * @return
      */
     public boolean onTouch(View v, MotionEvent event) {
-        mTextView01.setText(event.getAction()+"-"+event.getPressure()+"");
+        infoBar.setText(event.getAction()+"-"+event.getPressure()+"");
         //在线程运行时禁止点击
         if(t!=null&&t.isAlive()){
                     return false;
@@ -174,7 +198,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
                 GeoPoint p1= map.getProjection().fromPixels((int)PointStatu.maxX,(int)PointStatu.maxY);
                 GeoPoint p2= map.getProjection().fromPixels((int)PointStatu.minX,(int)PointStatu.minY);
                 GeoPoint temp = new GeoPoint(0, 0);
-                //mTextView01.setText(p1.toString());
+                //infoBar.setText(p1.toString());
                 //画封闭线
                 Log.i("","minX:"+(int)PointStatu.minX+"maxX:"+(int)PointStatu.maxX+"minY:"+(int)PointStatu.minY+"maxY:"+(int)PointStatu.maxY);
                 polygon.enClose();
@@ -210,16 +234,20 @@ public class MainActivity extends MapActivity implements OnTouchListener{
         @Override
         public void handleMessage(Message msg) {
             //终止动画线程
-            t.setIsEnd(true);
-            while(t.isAlive()){
-                Log.i("","Wait for Movie Thread to end");
+            if(t!=null){
+                t.setIsEnd(true);
+                while(t.isAlive()){
+                    Log.i("","Wait for Movie Thread to end");
+                }
+                t=null;
             }
             f=null;
-            t=null;
             PointStatu.reset();
             renderMapContainer.setVisibility(View.INVISIBLE);
             //-------------
             map.setClickable(true);
+            map.requestFocus();
+            alert.destory();
         }
     };
     /**在地图上增加信息点
@@ -234,7 +262,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
             String title =(String)Message.obtain(msg).getData().get("title");
             String type =(String)Message.obtain(msg).getData().get("type");
             String deepth =(String)Message.obtain(msg).getData().get("deepth");
-            mTextView01.setText(title.toString());
+            infoBar.setText(title.toString());
             List<Overlay> mapOverlays = map.getOverlays();
             //处理色深
             Drawable drawable = getResources().getDrawable(R.drawable.overlay0);

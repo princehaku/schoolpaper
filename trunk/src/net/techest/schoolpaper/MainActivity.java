@@ -160,6 +160,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
                 GeoPoint temp = new GeoPoint(0, 0);
                 //mTextView01.setText(p1.toString());
                 //画封闭线
+                Log.i("","minX:"+(int)PointStatu.minX+"maxX:"+(int)PointStatu.maxX+"minY:"+(int)PointStatu.minY+"maxY:"+(int)PointStatu.maxY);
                 polygon.enClose();
                 //开始动画
                 t=new MovieThread(this);

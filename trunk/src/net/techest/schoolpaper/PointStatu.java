@@ -37,6 +37,10 @@ public class PointStatu {
         PointStatu.lastY = 0f;
         PointStatu.X = 0f;
         PointStatu.Y = 0f;
+        minX = 320f;
+        maxX = 0f;
+        minY = 480f;
+        maxY = 0f;
     }
     /**更新点状态
      *

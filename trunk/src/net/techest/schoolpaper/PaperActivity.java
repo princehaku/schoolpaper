@@ -33,7 +33,6 @@ import net.techest.schoolpaper.util.XmlToPapers;
  * @author princehaku
  */
 public class PaperActivity extends Activity {
-
     //警告窗口
     public AlertWindow alert;
     /** Called when the activity is first created. */
@@ -42,16 +41,24 @@ public class PaperActivity extends Activity {
         super.onCreate(icicle);
         alert=new AlertWindow(this);
         setContentView(R.layout.paperview);
-        XmlToPapers xp=new XmlToPapers("http://schoolpaper.techest.net/getPoints.php?");
-        ArrayList<Paper> parse = xp.parse();
+        XmlToPapers xp=new XmlToPapers("http://schoolpaper.techest.net/getPoints.php?x1=30.672509&x2=30.673551&y1=104.140208&y2=104.141324");
+        ArrayList<Paper> papers=null;
+        try {
+            papers = xp.parse();
+        } catch (Exception ex) {
+
+        }
         ((TextView)findViewById(R.id.cc2)).setScrollContainer(true);
-        ((TextView)findViewById(R.id.title)).setText(""+parse.get(0).getTitle());
-        ((TextView)findViewById(R.id.date)).setText(""+parse.get(0).getAddDate());
-        ((TextView)findViewById(R.id.cc2)).setText(parse.get(0).getContent());
-        Log.v("","http://schoolpaper.techest.net/"+parse.get(0).getImagePath());
-        ((ImageView)findViewById(R.id.thumb)).setImageURI(Uri.parse("http://schoolpaper.techest.net"+parse.get(0).getImagePath()));
+        ((TextView)findViewById(R.id.title)).setText(""+papers.get(0).getTitle());
+        ((TextView)findViewById(R.id.date)).setText(""+papers.get(0).getAddDate());
+        ((TextView)findViewById(R.id.cc2)).setText(papers.get(0).getContent());
+        Log.v("","http://schoolpaper.techest.net/"+papers.get(0).getImagePath());
+        ((ImageView)findViewById(R.id.thumb)).setImageURI(Uri.parse("http://schoolpaper.techest.net"+papers.get(0).getImagePath()));
         // ToDo add your GUI initialization code here
-        xp.parse();
+    }
+    @Override
+    public void onPause(){
+        this.finish();
     }
 
 }

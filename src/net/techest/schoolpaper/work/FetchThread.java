@@ -79,6 +79,7 @@ public class FetchThread extends Thread {
             }
             PublicData.papers = xp.parse();
             int size=PublicData.papers.size();
+            Log.i("", "paper nums is :"+size);
             for (int i = 0; i < size; i++) {
                 Paper p = PublicData.papers.get(i);
                 int x=p.getX();
@@ -86,11 +87,11 @@ public class FetchThread extends Thread {
                 GeoPoint in=new GeoPoint(x, y);
                 Point out=new Point();
                 ((MainActivity)res).map.getProjection().toPixels(in, out);
-                if(((MainActivity) res).polygon.isInPolygon(out.x,out.y))
+                if(this.keywords.equals("")&&!((MainActivity) res).polygon.isInPolygon(out.x,out.y))
                 {
-                    addOverlay(p);
-                }else{
                     PublicData.papers.remove(i);
+                }else{
+                    addOverlay(p);
                 }
             }
             //c.get("http://schoolpaper.techest.net/getPoints.php?x=123&y=123&w=123&h=123", "utf8");

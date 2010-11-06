@@ -64,7 +64,6 @@ public class XmlToPapers {
                         Node nd = nodeList.item(i).getChildNodes().item(j);
                         if (nd.getNodeName().equals("id")) {
                             String value = nd.getTextContent();
-                            Log.i("", "id");
                             paper.setId(Integer.parseInt(value));
                         }
                         if (nd.getNodeName().equals("title")) {
@@ -105,6 +104,7 @@ public class XmlToPapers {
                         }
                     }
                     papers.add(paper);
+                    Log.i("", "one Paper Added");
                 }
             } catch (Exception ex) {
                 Log.i("", "parsing faild :" + ex.getMessage());
@@ -113,7 +113,6 @@ public class XmlToPapers {
             Log.i("", "connect server faild :" + ex.getMessage());
             throw ex;
         }
-        
         return papers;
     }
 }

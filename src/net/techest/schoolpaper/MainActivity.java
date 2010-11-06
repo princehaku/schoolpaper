@@ -15,7 +15,6 @@
  *  Created on : 2010-10-18, 21:05:57
  *  Author     : princehaku
  */
-
 package net.techest.schoolpaper;
 
 import android.content.Context;
@@ -48,7 +47,7 @@ import net.techest.schoolpaper.paper.PaperOverlay;
  *
  * @author princehaku
  */
-public class MainActivity extends MapActivity implements OnTouchListener{
+public class MainActivity extends MapActivity implements OnTouchListener {
 
     public MapView map;
     //测试用的文本框
@@ -65,23 +64,24 @@ public class MainActivity extends MapActivity implements OnTouchListener{
     FetchThread f;
     //警告窗口
     public AlertWindow alert;
+
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        alert=new AlertWindow(this);
+        alert = new AlertWindow(this);
         setContentView(R.layout.mapview);
-        searchText=(TextView) findViewById(R.id.searchtext);
+        searchText = (TextView) findViewById(R.id.searchtext);
         infoBar = (TextView) findViewById(R.id.infoBar);
         //初始化圈圈的画布
-        renderMapContainer=(ImageView)findViewById(R.id.render_map);
+        renderMapContainer = (ImageView) findViewById(R.id.render_map);
         renderMapContainer.setLongClickable(true);
-        renderMapContainer.setOnTouchListener((OnTouchListener)this);
+        renderMapContainer.setOnTouchListener((OnTouchListener) this);
         //初始化地图
-        map = (MapView)findViewById(R.id.my_map);
-        if(PublicData.centerPoint==null){
-            map.getController().setCenter(new GeoPoint(30673860,104141635));
-        }else{
+        map = (MapView) findViewById(R.id.my_map);
+        if (PublicData.centerPoint == null) {
+            map.getController().setCenter(new GeoPoint(30673860, 104141635));
+        } else {
             map.getController().setCenter(PublicData.centerPoint);
         }
         map.getController().setZoom(18);
@@ -93,77 +93,74 @@ public class MainActivity extends MapActivity implements OnTouchListener{
         map.setDrawingCacheEnabled(false);
         renderMapContainer.setVisibility(View.INVISIBLE);
         //绑定圈圈的点击事件
-        ((Button)findViewById(R.id.quan)).setOnClickListener(
+        ((Button) findViewById(R.id.quan)).setOnClickListener(
+                new OnClickListener() {
 
-         new OnClickListener(){
-
-            public void onClick(View v) {
-                renderMapContainer.setFocusableInTouchMode(true);
-                renderMapContainer.setFocusable(true);
-                renderMapContainer.requestFocus();
-                if(f!=null&&f.isAlive()){
-                    return;
-                }
-                map.setClickable(false);
-                renderMapContainer.setVisibility(View.INVISIBLE);
-                //清空已经有的坐标
-                map.getOverlays().clear();
-                //更新下画布
-                PointStatu.reset();
-                if(polygon==null){
-                    polygon=new Polygon();
-                }else
-                    {
-                    renderMapContainer.setImageBitmap(map.getDrawingCache());
-                    polygon=new Polygon();
-                }
-                //使画布显示 覆盖在mapview之上 开始工作
-                renderMapContainer.setVisibility(View.VISIBLE);
-                renderMapContainer.setLongClickable(true);
-            }
-            }
-        );
+                    public void onClick(View v) {
+                        renderMapContainer.setFocusableInTouchMode(true);
+                        renderMapContainer.setFocusable(true);
+                        renderMapContainer.requestFocus();
+                        if (f != null && f.isAlive()) {
+                            return;
+                        }
+                        map.setClickable(false);
+                        renderMapContainer.setVisibility(View.INVISIBLE);
+                        //清空已经有的坐标
+                        map.getOverlays().clear();
+                        //更新下画布
+                        PointStatu.reset();
+                        if (polygon == null) {
+                            polygon = new Polygon();
+                        } else {
+                            renderMapContainer.setImageBitmap(map.getDrawingCache());
+                            polygon = new Polygon();
+                        }
+                        //使画布显示 覆盖在mapview之上 开始工作
+                        renderMapContainer.setVisibility(View.VISIBLE);
+                        renderMapContainer.setLongClickable(true);
+                    }
+                });
         //绑定搜索按钮的点击事件
-        ((Button)findViewById(R.id.search)).setOnClickListener(
+        ((Button) findViewById(R.id.search)).setOnClickListener(
+                new OnClickListener() {
 
-         new OnClickListener(){
-
-            public void onClick(View arg0) {
-                //隐藏软键盘
-                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-                View view = getCurrentFocus();
-                if (view != null){
-                  imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
-                if(searchText.getText().length()<1){
-                    alert.show("注意", "关键词请输入大于一个字");
-                    return;
-                }
-                alert.show("提示", "请稍后 正在为您搜索纸片");
-                //清空已经有的坐标
-                map.getOverlays().clear();
-                //从服务器获取信息
-                f=new FetchThread(MainActivity.this,searchText.getText().toString());
-                f.start();
-            }
-        });
+                    public void onClick(View arg0) {
+                        //隐藏软键盘
+                        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                        View view = getCurrentFocus();
+                        if (view != null) {
+                            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                        }
+                        if (searchText.getText().length() < 1) {
+                            alert.show("注意", "关键词请输入大于一个字");
+                            return;
+                        }
+                        alert.show("提示", "请稍后 正在为您搜索纸片");
+                        //清空已经有的坐标
+                        map.getOverlays().clear();
+                        //从服务器获取信息
+                        f = new FetchThread(MainActivity.this, searchText.getText().toString());
+                        f.start();
+                    }
+                });
         //如果存在数据 重绘标点
-            if(PublicData.papers!=null){
-                for(int i=0;i<PublicData.papers.size();i++){
-                    Paper p=PublicData.papers.get(i);
-                        addOverlay(p);
-                }
+        if (PublicData.papers != null) {
+            for (int i = 0; i < PublicData.papers.size(); i++) {
+                Paper p = PublicData.papers.get(i);
+                addOverlay(p);
             }
         }
-        
+    }
+
     /**必须重载此方法
      *
      * @return
      */
     @Override
     protected boolean isRouteDisplayed() {
-       return false;
+        return false;
     }
+
     /**这个方法是给地图层上的画图层 触摸的时候画线
      * 离开的时候计算并发送信息给服务器
      * @param v
@@ -171,23 +168,22 @@ public class MainActivity extends MapActivity implements OnTouchListener{
      * @return
      */
     public boolean onTouch(View v, MotionEvent event) {
-        infoBar.setText(event.getAction()+"-"+event.getPressure()+"");
+        infoBar.setText(event.getAction() + "-" + event.getPressure() + "");
         //在线程运行时禁止点击
-        if(t!=null&&t.isAlive()){
-                    return false;
+        if (t != null && t.isAlive()) {
+            return false;
         }
-        PointStatu.X=event.getX();
-        PointStatu.Y=event.getY();
-        switch(event.getAction())
-        {
+        PointStatu.X = event.getX();
+        PointStatu.Y = event.getY();
+        switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                PointStatu.updatePoint(PointStatu.X,PointStatu.Y);
+                PointStatu.updatePoint(PointStatu.X, PointStatu.Y);
                 polygon.addPoint(PointStatu.lastX, PointStatu.lastY);
                 break;
             case MotionEvent.ACTION_MOVE:
                 //如果当前点的x或者y范围超过5且5像素内无其他像素则画图并设置到新点
-                if((Math.abs(PointStatu.Y-PointStatu.lastY)>5||Math.abs(PointStatu.X-PointStatu.lastX)>5)){
-                    PointStatu.updatePoint(PointStatu.X,PointStatu.Y);
+                if ((Math.abs(PointStatu.Y - PointStatu.lastY) > 5 || Math.abs(PointStatu.X - PointStatu.lastX) > 5)) {
+                    PointStatu.updatePoint(PointStatu.X, PointStatu.Y);
                     polygon.addPoint(PointStatu.lastX, PointStatu.lastY);
                     //更新图像
                     renderMapContainer.setImageBitmap(polygon.getBitmap());
@@ -195,24 +191,24 @@ public class MainActivity extends MapActivity implements OnTouchListener{
                 break;
             case MotionEvent.ACTION_UP:
                 //保存地图中心坐标到公共数据区
-                PublicData.centerPoint=map.getMapCenter();
-                PointStatu.updatePoint(PointStatu.X,PointStatu.Y);
+                PublicData.centerPoint = map.getMapCenter();
+                PointStatu.updatePoint(PointStatu.X, PointStatu.Y);
                 renderMapContainer.setLongClickable(false);
                 map.setClickable(false);
                 //释放的时候计算坐标成地理坐标.上传给服务器
-                GeoPoint p1= map.getProjection().fromPixels((int)PointStatu.maxX,(int)PointStatu.maxY);
-                GeoPoint p2= map.getProjection().fromPixels((int)PointStatu.minX,(int)PointStatu.minY);
+                GeoPoint p1 = map.getProjection().fromPixels((int) PointStatu.maxX, (int) PointStatu.maxY);
+                GeoPoint p2 = map.getProjection().fromPixels((int) PointStatu.minX, (int) PointStatu.minY);
                 GeoPoint temp = new GeoPoint(0, 0);
-                Log.i("","minX:"+(int)PointStatu.minX+"maxX:"+(int)PointStatu.maxX+"minY:"+(int)PointStatu.minY+"maxY:"+(int)PointStatu.maxY);
+                Log.i("", "minX:" + (int) PointStatu.minX + "maxX:" + (int) PointStatu.maxX + "minY:" + (int) PointStatu.minY + "maxY:" + (int) PointStatu.maxY);
                 //infoBar.setText(p1.toString());
                 //画封闭线
                 polygon.enClose();
                 //开始动画
-                t=new MovieThread(this);
+                t = new MovieThread(this);
                 t.start();
                 //从服务器获取信息
-                f=new FetchThread(this,p1.getLatitudeE6()-temp.getLatitudeE6(),
-                        p2.getLatitudeE6()-temp.getLatitudeE6(),p2.getLongitudeE6()-temp.getLongitudeE6(),p1.getLongitudeE6()-temp.getLongitudeE6());
+                f = new FetchThread(this, p1.getLatitudeE6() - temp.getLatitudeE6(),
+                        p2.getLatitudeE6() - temp.getLatitudeE6(), p2.getLongitudeE6() - temp.getLongitudeE6(), p1.getLongitudeE6() - temp.getLongitudeE6());
                 f.start();
                 break;
         }
@@ -221,10 +217,11 @@ public class MainActivity extends MapActivity implements OnTouchListener{
     /**更新渲染层图像
      *
      */
-    public Handler cacheUpdateHandler=new Handler() {
+    public Handler cacheUpdateHandler = new Handler() {
+
         @Override
         public void handleMessage(Message msg) {
-            switch(msg.what){
+            switch (msg.what) {
                 case 1:
                     renderMapContainer.setImageBitmap(polygon.getBitmap());
                     break;
@@ -235,62 +232,67 @@ public class MainActivity extends MapActivity implements OnTouchListener{
     /**终止动画线程
      *
      */
-    public Handler finishHandler =new Handler(){
+    public Handler finishHandler = new Handler() {
+
         @Override
         public void handleMessage(Message msg) {
             //终止动画线程
-            if(t!=null){
+            if (t != null) {
                 t.setIsEnd(true);
-                while(t.isAlive()){
-                    Log.i("","Wait for Movie Thread to end");
+                while (t.isAlive()) {
+                    Log.i("", "Wait for Movie Thread to end");
                 }
-                t=null;
+                t = null;
             }
-            f=null;
+            f = null;
             PointStatu.reset();
             renderMapContainer.setVisibility(View.INVISIBLE);
             //-------------
             map.setClickable(true);
             map.requestFocus();
-            if(PublicData.centerPoint!=null)map.getController().setCenter(PublicData.centerPoint);
+            if (PublicData.centerPoint != null) {
+                map.getController().setCenter(PublicData.centerPoint);
+            }
             alert.destory();
         }
     };
     /**在地图上增加信息点
      *
      */
-    public Handler mapPointAddHandler=new Handler() {
+    public Handler mapPointAddHandler = new Handler() {
+
         @Override
         public void handleMessage(Message msg) {
-            String id =(String)Message.obtain(msg).getData().get("id");
-            String x =(String)Message.obtain(msg).getData().get("x");
-            String y =(String)Message.obtain(msg).getData().get("y");
-            String title =(String)Message.obtain(msg).getData().get("title");
-            String type =(String)Message.obtain(msg).getData().get("type");
-            String deepth =(String)Message.obtain(msg).getData().get("deepth");
+            String id = (String) Message.obtain(msg).getData().get("id");
+            String x = (String) Message.obtain(msg).getData().get("x");
+            String y = (String) Message.obtain(msg).getData().get("y");
+            String title = (String) Message.obtain(msg).getData().get("title");
+            String type = (String) Message.obtain(msg).getData().get("type");
+            String deepth = (String) Message.obtain(msg).getData().get("deepth");
             infoBar.setText(title.toString());
             List<Overlay> mapOverlays = map.getOverlays();
             //处理色深
             Drawable drawable = getResources().getDrawable(R.drawable.overlay0);
-            
-            if(deepth.equals("1")){
+
+            if (deepth.equals("1")) {
                 drawable = getResources().getDrawable(R.drawable.overlay1);
             }
-            if(deepth.equals("2")){
+            if (deepth.equals("2")) {
                 drawable = getResources().getDrawable(R.drawable.overlay2);
             }
-            if(deepth.equals("3")){
+            if (deepth.equals("3")) {
                 drawable = getResources().getDrawable(R.drawable.overlay3);
             }
-            if(deepth.equals("4")){
+            if (deepth.equals("4")) {
                 drawable = getResources().getDrawable(R.drawable.overlay4);
             }
-            if(deepth.equals("5")){
+            if (deepth.equals("5")) {
                 drawable = getResources().getDrawable(R.drawable.overlay5);
             }
-            PaperOverlay itemizedoverlay = new PaperOverlay(drawable,map.getContext(),MainActivity.this,Integer.parseInt(id));
-            GeoPoint point = new GeoPoint(Integer.parseInt(x),Integer.parseInt(y));
-            PublicData.centerPoint=point;
+            //增加坐标
+            PaperOverlay itemizedoverlay = new PaperOverlay(drawable, map.getContext(), MainActivity.this, Integer.parseInt(id));
+            GeoPoint point = new GeoPoint(Integer.parseInt(x), Integer.parseInt(y));
+            PublicData.centerPoint = point;
             OverlayItem overlayitem = new OverlayItem(point, title, "");
             itemizedoverlay.addOverlay(overlayitem);
             mapOverlays.add(itemizedoverlay);
@@ -301,15 +303,15 @@ public class MainActivity extends MapActivity implements OnTouchListener{
     /**增加一个纸片到地图视图
      *
      */
-    private void addOverlay(Paper p){
+    private void addOverlay(Paper p) {
         Message msg = new Message();
         Bundle ble = new Bundle();
-        ble.putString("id",""+p.getId());
-        ble.putString("x",""+p.getX());
-        ble.putString("y",""+p.getY());
-        ble.putString("title",p.getTitle());
-        ble.putString("type",p.getType().name());
-        ble.putString("deepth",""+p.getDeepth());
+        ble.putString("id", "" + p.getId());
+        ble.putString("x", "" + p.getX());
+        ble.putString("y", "" + p.getY());
+        ble.putString("title", p.getTitle());
+        ble.putString("type", p.getType().name());
+        ble.putString("deepth", "" + p.getDeepth());
         msg.setData(ble);
         this.mapPointAddHandler.sendMessage(msg);
     }

@@ -15,7 +15,6 @@
  *  Created on : 2010-10-28, 23:02:17
  *  Author     : princehaku
  */
-
 package net.techest.schoolpaper.work;
 
 import android.app.Activity;
@@ -31,52 +30,49 @@ public class MovieThread extends Thread {
      *
      */
     private static Activity res;
-
     /**扫描线y值
      *
      */
-    private int lasty=0;
-
+    private int lasty = 0;
     /**扫描线方向
      *
      */
-    private int direction=0;
+    private int direction = 0;
 
     public MovieThread(Activity res) {
         MovieThread.res = res;
     }
-    /**用于外部强行终止线程
+    /**用于外部终止线程
      *
      */
-    private boolean isEnd=false;
+    private boolean isEnd = false;
+
     @Override
     public void run() {
-            while(1==1&&isEnd==false)
-            {
-                this.nextFrame();
-                ((MainActivity)res).cacheUpdateHandler.sendEmptyMessage(1);
-            }
+        while (1 == 1 && isEnd == false) {
+            this.nextFrame();
+            ((MainActivity) res).cacheUpdateHandler.sendEmptyMessage(1);
         }
+    }
 
     /**下一帧动画
      *
      */
-    public void nextFrame(){
+    public void nextFrame() {
 
-        if(direction==0){
-            lasty-=3;
-            if(lasty<=0){
-                direction=1;
+        if (direction == 0) {
+            lasty -= 3;
+            if (lasty <= 0) {
+                direction = 1;
             }
-        }
-        else{
-            lasty+=3;
-            if(lasty>=((MainActivity)res).polygon.getHeight()){
-                direction=0;
+        } else {
+            lasty += 3;
+            if (lasty >= ((MainActivity) res).polygon.getHeight()) {
+                direction = 0;
             }
         }
         //Log.i("","line at:"+lasty);
-        ((MainActivity)res).polygon.drawScanLine(lasty);
+        ((MainActivity) res).polygon.drawScanLine(lasty);
     }
 
     public boolean isIsEnd() {

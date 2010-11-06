@@ -15,7 +15,6 @@
  *  Created on : 2010-10-31, 21:05:07
  *  Author     : princehaku
  */
-
 package net.techest.schoolpaper.paper;
 
 import android.app.Activity;
@@ -33,7 +32,7 @@ import net.techest.schoolpaper.PublicData;
  *
  * @author princehaku
  */
-public class PaperOverlay extends ItemizedOverlay{
+public class PaperOverlay extends ItemizedOverlay {
 
     /**资源
      *
@@ -48,17 +47,19 @@ public class PaperOverlay extends ItemizedOverlay{
      *
      */
     private final int paperId;
+
     /**
      * 
      * @param defaultMarker
      * @param context
      */
-    public PaperOverlay(Drawable defaultMarker, Context context,Activity res,int paperId) {
-      super(boundCenterBottom(defaultMarker));
-      mContext = context;
-      this.res=res;
-      this.paperId=paperId;
+    public PaperOverlay(Drawable defaultMarker, Context context, Activity res, int paperId) {
+        super(boundCenterBottom(defaultMarker));
+        mContext = context;
+        this.res = res;
+        this.paperId = paperId;
     }
+
     /**点击时显示到新的PaperActivity
      *
      * @param index
@@ -66,31 +67,31 @@ public class PaperOverlay extends ItemizedOverlay{
      */
     @Override
     protected boolean onTap(int index) {
-      OverlayItem item = mOverlays.get(index);
-      PublicData.nowPaperId=paperId;
-      AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-      dialog.setTitle(item.getTitle());
-      dialog.setMessage("请稍后 读取数据中...");
-      dialog.show();
-      Intent intent = new Intent();
-      intent.setClass(mContext, PaperActivity.class);
-      mContext.startActivity(intent);
-      this.res.finish();
-      return true;
+        OverlayItem item = mOverlays.get(index);
+        PublicData.nowPaperId = paperId;
+        AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+        dialog.setTitle(item.getTitle());
+        dialog.setMessage("请稍后 读取数据中...");
+        dialog.show();
+        Intent intent = new Intent();
+        intent.setClass(mContext, PaperActivity.class);
+        mContext.startActivity(intent);
+        this.res.finish();
+        return true;
     }
 
     public void addOverlay(OverlayItem overlay) {
         mOverlays.add(overlay);
         populate();
     }
+
     @Override
     protected OverlayItem createItem(int i) {
-      return mOverlays.get(i);
+        return mOverlays.get(i);
     }
 
-   @Override
+    @Override
     public int size() {
-      return mOverlays.size();
+        return mOverlays.size();
     }
-
 }

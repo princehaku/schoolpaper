@@ -15,28 +15,23 @@
  *  Created on : 2010-11-2, 21:49:13
  *  Author     : princehaku
  */
-
 package net.techest.schoolpaper.paper;
 
 import android.graphics.Point;
 import android.util.Log;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.StringTokenizer;
 
 /**纸片
  *
  * @author princehaku
  */
-public class Paper extends Point{
+public class Paper extends Point {
 
     private int id;
     /**纸片类型
      *
      */
     private PaperType type;
-
     /**标题
      *
      */
@@ -45,7 +40,6 @@ public class Paper extends Point{
      *
      */
     private String imageName;
-
     /**内容
      *
      */
@@ -67,15 +61,16 @@ public class Paper extends Point{
      */
     private String imagePath;
 
-    public String getImagePath() throws ParseException {
-        StringTokenizer st=new StringTokenizer(getAddDate(), " ");
-        imagePath="uploads/"+st.nextToken().replaceAll("-", "")+"/";
+    public String getImagePath() throws Exception {
+        StringTokenizer st = new StringTokenizer(getAddDate(), " ");
+        imagePath = "uploads/" + st.nextToken().replaceAll("-", "") + "/";
         Log.i("", imagePath);
         return imagePath;
     }
-    public Paper() {
 
+    public Paper() {
     }
+
     /**
      * @param id
      * @param x 字符串为小数点前+小数点后6位组成 比如30.673103 => 30673103
@@ -86,12 +81,12 @@ public class Paper extends Point{
      * @param paperDate
      * @param deepth
      */
-    public Paper(int id,int x, int y, PaperType type, String title,String imageName, String content, String addDate,int deepth) {
+    public Paper(int id, int x, int y, PaperType type, String title, String imageName, String content, String addDate, int deepth) {
         this.id = id;
-        this.x=x;
-        this.y=y;
+        this.x = x;
+        this.y = y;
         this.type = type;
-        this.imageName=imageName;
+        this.imageName = imageName;
         this.title = title;
         this.content = content;
         this.paperDate = addDate;
@@ -105,6 +100,7 @@ public class Paper extends Point{
     public void setAddDate(String addDate) {
         this.addDate = addDate;
     }
+
     public String getPaperDate() {
         return paperDate;
     }
@@ -116,9 +112,11 @@ public class Paper extends Point{
     public void setImageName(String imageName) {
         this.imageName = imageName;
     }
+
     public void setPaperDate(String paperDate) {
         this.paperDate = paperDate;
     }
+
     public int getDeepth() {
         return deepth;
     }

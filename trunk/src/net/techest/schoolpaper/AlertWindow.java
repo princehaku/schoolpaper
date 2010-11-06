@@ -24,7 +24,6 @@ public class AlertWindow {
      *
      */
     private static Context res;
-    
     Dialog alert;
 
     /**从上级资源中构建
@@ -34,12 +33,13 @@ public class AlertWindow {
     AlertWindow(Context res) {
         this.res = res;
     }
+
     /**显示对话框
      *
      * @param title
      * @param message
      */
-    public void show(String title,String message) {
+    public void show(String title, String message) {
         Message msg = new Message();
         Bundle ble = new Bundle();
         ble.putString("title", title);
@@ -52,15 +52,16 @@ public class AlertWindow {
      *
      */
     public void destory() {
-        if(alert!=null){
+        if (alert != null) {
             alert.dismiss();
         }
     }
+
     /**隐含的方法
      * 显示对话框
      * @param info
      */
-    private void alert(String title,String info) {
+    private void alert(String title, String info) {
         if (alert != null) {
             alert.dismiss();
         }
@@ -70,9 +71,10 @@ public class AlertWindow {
      * 保证线程安全
      */
     public Handler alertHandler = new Handler() {
+
         @Override
         public void handleMessage(Message msg) {
-            alert(msg.getData().getString("title"),msg.getData().getString("msg"));
+            alert(msg.getData().getString("title"), msg.getData().getString("msg"));
             super.handleMessage(msg);
         }
     };

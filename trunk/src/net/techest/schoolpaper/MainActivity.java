@@ -17,7 +17,6 @@
  */
 package net.techest.schoolpaper;
 
-import android.content.Context;
 import net.techest.schoolpaper.graph.Polygon;
 import net.techest.schoolpaper.work.MovieThread;
 import net.techest.schoolpaper.work.FetchThread;

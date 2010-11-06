@@ -90,9 +90,12 @@ public class PaperActivity extends Activity {
         Log.i("", "paper nums:" + papers.size());
         String imgurl ="http://schoolpaper.techest.net/img/null.png";
         try {
-            imgurl = "http://schoolpaper.techest.net/" + papers.get(nowIndex).getImagePath()+papers.get(idx).getImageName();
+            String imgName=papers.get(idx).getImageName();
+            imgurl = "http://schoolpaper.techest.net/" + papers.get(nowIndex).getImagePath()+
+                    "1-"+imgName.substring(0, 8)+
+                    imgName.substring(imgName.indexOf("."), imgName.length());
         } catch (ParseException ex) {
-            Logger.getLogger(PaperActivity.class.getName()).log(Level.SEVERE, null, ex);
+            Log.i("", "Image path parse failed");
         }
         ((TextView) findViewById(R.id.cc2)).setScrollContainer(true);
         ((TextView) findViewById(R.id.title)).setText("" + papers.get(idx).getTitle());
@@ -111,7 +114,7 @@ public class PaperActivity extends Activity {
             is.close(); }
          catch (Exception e) {
 
-        }
+         }
         image.setOnClickListener(new OnClickListener() {
 
             public void onClick(View arg0) {
@@ -129,9 +132,12 @@ public class PaperActivity extends Activity {
 
         String imgurl ="http://schoolpaper.techest.net/img/null.png";
         try {
-            imgurl = "http://schoolpaper.techest.net/" + papers.get(nowIndex).getImagePath()+papers.get(nowIndex).getImageName();
+            String imgName=papers.get(nowIndex).getImageName();
+            imgurl = "http://schoolpaper.techest.net/" + papers.get(nowIndex).getImagePath()+
+                    "2-"+imgName.substring(0, 8)+
+                    imgName.substring(imgName.indexOf("."), imgName.length());
         } catch (ParseException ex) {
-            Logger.getLogger(PaperActivity.class.getName()).log(Level.SEVERE, null, ex);
+            Log.i("", "Image path parse failed");
         }
         try {
             URL url = new URL(imgurl);

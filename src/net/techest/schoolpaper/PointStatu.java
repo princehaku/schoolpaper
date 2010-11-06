@@ -42,6 +42,7 @@ public class PointStatu {
         minY = 480f;
         maxY = 0f;
     }
+
     /**更新点状态
      *
      * @param x
@@ -49,18 +50,18 @@ public class PointStatu {
      */
     static void updatePoint(float x, float y) {
         PointStatu.lastX = PointStatu.X;
-        if(PointStatu.X>maxX){
-            maxX=PointStatu.X;
+        if (PointStatu.X > maxX) {
+            maxX = PointStatu.X;
         }
-        if(PointStatu.X<minX){
-            minX=PointStatu.X;
+        if (PointStatu.X < minX) {
+            minX = PointStatu.X;
         }
         PointStatu.lastY = PointStatu.Y;
-        if(PointStatu.Y>maxY){
-            maxY=PointStatu.Y;
+        if (PointStatu.Y > maxY) {
+            maxY = PointStatu.Y;
         }
-        if(PointStatu.Y<minY){
-            minY=PointStatu.Y;
+        if (PointStatu.Y < minY) {
+            minY = PointStatu.Y;
         }
     }
 }

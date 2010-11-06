@@ -15,7 +15,6 @@
  *  Created on : 2010-11-5, 10:09:19
  *  Author     : princehaku
  */
-
 package net.techest.schoolpaper;
 
 import com.google.android.maps.GeoPoint;
@@ -27,24 +26,26 @@ import net.techest.schoolpaper.paper.Paper;
  * @author princehaku
  */
 public class PublicData {
+
     /**纸片数据
      * 
      */
-    public static  ArrayList<Paper> papers=null;
+    public static ArrayList<Paper> papers = null;
     /**当前查看的纸片的id号
      *
      */
-    public static int nowPaperId=0;
+    public static int nowPaperId = 0;
     /**当前地图中心
      *
      */
-    public static GeoPoint centerPoint=null;
+    public static GeoPoint centerPoint = null;
+
     /**重设所有数据
      *
      */
-    public void reset(){
-        papers=null;
-        nowPaperId=0;
-        centerPoint=null;
+    public void reset() {
+        papers = null;
+        nowPaperId = 0;
+        centerPoint = null;
     }
 }

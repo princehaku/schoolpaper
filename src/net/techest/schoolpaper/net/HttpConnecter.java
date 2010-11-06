@@ -15,7 +15,6 @@
  *  Created on : 2010-11-2, 9:00:56
  *  Author     : princehaku
  */
-
 package net.techest.schoolpaper.net;
 
 import java.io.BufferedReader;
@@ -30,45 +29,47 @@ import java.net.URL;
  * @author princehaku
  */
 public class HttpConnecter {
-	/**
-	 * url
-	 *
-	 * @param url
-	 *            提交地址
-	 * @param encode
-	 *            编码
-	 */
-	@SuppressWarnings("finally")
-	public String get(String url, String encode) throws Exception {
 
-		String line = "";
+    /**
+     * url
+     *
+     * @param url
+     *            提交地址
+     * @param encode
+     *            编码
+     */
+    @SuppressWarnings("finally")
+    public String get(String url, String encode) throws Exception {
 
-		String content = "";
+        String line = "";
 
-		HttpURLConnection httpConn = null;
+        String content = "";
 
-		try {
-			URL turl = new URL(url);
-			// System.out.println(url);
-			httpConn = (HttpURLConnection) turl.openConnection();
-			httpConn.setRequestMethod("GET");
-                        httpConn.connect();
-			InputStream uurl=null;
-			uurl = httpConn.getInputStream();
-			BufferedReader br = new BufferedReader(new InputStreamReader(uurl,encode));
-			while (line != null) {
-				line = br.readLine();
-				if (line   !=   null)
-					content = content.toString() + line.toString() + "\n";
-			}
-			// 关闭连接
-			httpConn.disconnect();
-			return content;
+        HttpURLConnection httpConn = null;
 
-		} catch (Exception e) {
-			// 关闭连接
-			httpConn.disconnect();
-			throw e;
+        try {
+            URL turl = new URL(url);
+            // System.out.println(url);
+            httpConn = (HttpURLConnection) turl.openConnection();
+            httpConn.setRequestMethod("GET");
+            httpConn.connect();
+            InputStream uurl = null;
+            uurl = httpConn.getInputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(uurl, encode));
+            while (line != null) {
+                line = br.readLine();
+                if (line != null) {
+                    content = content.toString() + line.toString() + "\n";
                 }
-	}
+            }
+            // 关闭连接
+            httpConn.disconnect();
+            return content;
+
+        } catch (Exception e) {
+            // 关闭连接
+            httpConn.disconnect();
+            throw e;
+        }
+    }
 }

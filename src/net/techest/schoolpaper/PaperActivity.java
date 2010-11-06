@@ -36,8 +36,6 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.techest.schoolpaper.paper.Paper;
 
 /**
@@ -52,7 +50,6 @@ public class PaperActivity extends Activity {
      *
      */
     private static int nowIndex = 0;
-
     private boolean showBigPic = false;
 
     /** Called when the activity is first created. */
@@ -86,14 +83,14 @@ public class PaperActivity extends Activity {
         if (deepth.equals("5")) {
             drawable = getResources().getDrawable(R.drawable.bg5);
         }
-        ((AbsoluteLayout)findViewById(R.id.widget46)).setBackgroundDrawable(drawable);
+        ((AbsoluteLayout) findViewById(R.id.widget46)).setBackgroundDrawable(drawable);
         Log.i("", "paper nums:" + papers.size());
-        String imgurl ="http://schoolpaper.techest.net/img/null.png";
+        String imgurl = "http://schoolpaper.techest.net/img/null.png";
         try {
-            String imgName=papers.get(idx).getImageName();
-            imgurl = "http://schoolpaper.techest.net/" + papers.get(nowIndex).getImagePath()+
-                    "1-"+imgName.substring(0, 8)+
-                    imgName.substring(imgName.indexOf("."), imgName.length());
+            String imgName = papers.get(idx).getImageName();
+            imgurl = "http://schoolpaper.techest.net/" + papers.get(nowIndex).getImagePath()
+                    + "1-" + imgName.substring(0, 8)
+                    + imgName.substring(imgName.indexOf("."), imgName.length());
         } catch (ParseException ex) {
             Log.i("", "Image path parse failed");
         }
@@ -104,17 +101,16 @@ public class PaperActivity extends Activity {
         ((TextView) findViewById(R.id.cc2)).setText(text);
         Log.v("", imgurl);
         ImageView image = ((ImageView) findViewById(R.id.thumb));
-         try {
+        try {
             URL url = new URL(imgurl);
             URLConnection conn = url.openConnection();
             conn.connect();
             InputStream is = conn.getInputStream();
             Bitmap bm = BitmapFactory.decodeStream(is);
             image.setImageBitmap(bm);
-            is.close(); }
-         catch (Exception e) {
-
-         }
+            is.close();
+        } catch (Exception e) {
+        }
         image.setOnClickListener(new OnClickListener() {
 
             public void onClick(View arg0) {
@@ -130,12 +126,12 @@ public class PaperActivity extends Activity {
     private void showBigPic() {
         ArrayList<Paper> papers = PublicData.papers;
 
-        String imgurl ="http://schoolpaper.techest.net/img/null.png";
+        String imgurl = "http://schoolpaper.techest.net/img/null.png";
         try {
-            String imgName=papers.get(nowIndex).getImageName();
-            imgurl = "http://schoolpaper.techest.net/" + papers.get(nowIndex).getImagePath()+
-                    "2-"+imgName.substring(0, 8)+
-                    imgName.substring(imgName.indexOf("."), imgName.length());
+            String imgName = papers.get(nowIndex).getImageName();
+            imgurl = "http://schoolpaper.techest.net/" + papers.get(nowIndex).getImagePath()
+                    + "2-" + imgName.substring(0, 8)
+                    + imgName.substring(imgName.indexOf("."), imgName.length());
         } catch (ParseException ex) {
             Log.i("", "Image path parse failed");
         }
@@ -182,7 +178,7 @@ public class PaperActivity extends Activity {
     private int getIdxByid(int nowPaperId) {
         for (int i = 0; i < PublicData.papers.size(); i++) {
             if (nowPaperId == PublicData.papers.get(i).getId()) {
-                nowIndex=i;
+                nowIndex = i;
                 return i;
             }
         }

@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package net.techest.schoolpaper.paper;
 
 /**纸片的类型
@@ -10,15 +9,14 @@ package net.techest.schoolpaper.paper;
  * @author princehaku
  */
 public enum PaperType {
+
     BAIKE,
     XINWEN,
     SUIPIAN,
     QITA;
 
-
     public static PaperType parseType(int parseInt) {
-        switch(parseInt)
-        {
+        switch (parseInt) {
             case 0:
                 return QITA;
             case 1:

@@ -15,7 +15,6 @@
  *  Created on : 2010-10-27, 21:39:56
  *  Author     : princehaku
  */
-
 package net.techest.schoolpaper.graph;
 
 import android.graphics.Point;
@@ -24,19 +23,18 @@ import android.graphics.Point;
  *
  * @author princehaku
  */
-class PolygonPoint extends Point{
+class PolygonPoint extends Point {
 
-    int x(){
+    int x() {
         return this.x;
     }
 
-    int y(){
+    int y() {
         return this.y;
     }
-    
-    PolygonPoint(float x, float y) {
-        this.x=(int) x;
-        this.y=(int) y;
-    }
 
+    PolygonPoint(float x, float y) {
+        this.x = (int) x;
+        this.y = (int) y;
+    }
 }

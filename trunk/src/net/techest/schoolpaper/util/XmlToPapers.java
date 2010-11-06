@@ -34,13 +34,11 @@ import org.w3c.dom.Node;
  */
 public class XmlToPapers {
 
-    
     private ArrayList<Paper> papers = new ArrayList();
-
     private String url;
-    
+
     public XmlToPapers(String url) {
-        this.url=url;
+        this.url = url;
     }
 
     public ArrayList<Paper> parse() throws Exception {

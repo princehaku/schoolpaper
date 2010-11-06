@@ -78,19 +78,18 @@ public class FetchThread extends Thread {
                 Log.i("", "URL IS :http://schoolpaper.techest.net/getPoints.php?key=" + Uri.encode(this.keywords));
             }
             PublicData.papers = xp.parse();
-            int size=PublicData.papers.size();
-            Log.i("", "paper nums is :"+size);
+            int size = PublicData.papers.size();
+            Log.i("", "paper nums is :" + size);
             for (int i = 0; i < size; i++) {
                 Paper p = PublicData.papers.get(i);
-                int x=p.getX();
-                int y=p.getY();
-                GeoPoint in=new GeoPoint(x, y);
-                Point out=new Point();
-                ((MainActivity)res).map.getProjection().toPixels(in, out);
-                if(this.keywords.equals("")&&!((MainActivity) res).polygon.isInPolygon(out.x,out.y))
-                {
+                int x = p.getX();
+                int y = p.getY();
+                GeoPoint in = new GeoPoint(x, y);
+                Point out = new Point();
+                ((MainActivity) res).map.getProjection().toPixels(in, out);
+                if (this.keywords.equals("") && !((MainActivity) res).polygon.isInPolygon(out.x, out.y)) {
                     PublicData.papers.remove(i);
-                }else{
+                } else {
                     addOverlay(p);
                 }
             }

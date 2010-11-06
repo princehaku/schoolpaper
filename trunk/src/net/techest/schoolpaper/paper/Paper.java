@@ -19,6 +19,11 @@
 package net.techest.schoolpaper.paper;
 
 import android.graphics.Point;
+import android.util.Log;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.StringTokenizer;
 
 /**纸片
  *
@@ -36,10 +41,11 @@ public class Paper extends Point{
      *
      */
     private String title;
-    /**图片路径
+    /**图片名称
      *
      */
-    private String imagePath;
+    private String imageName;
+
     /**内容
      *
      */
@@ -52,8 +58,21 @@ public class Paper extends Point{
      *
      */
     private String paperDate;
+    /**填加的时间
+     *
+     */
+    private String addDate;
+    /**图片路径
+     *
+     */
+    private String imagePath;
 
-
+    public String getImagePath() throws ParseException {
+        StringTokenizer st=new StringTokenizer(getAddDate(), " ");
+        imagePath="uploads/"+st.nextToken().replaceAll("-", "")+"/";
+        Log.i("", imagePath);
+        return imagePath;
+    }
     public Paper() {
 
     }
@@ -67,32 +86,38 @@ public class Paper extends Point{
      * @param paperDate
      * @param deepth
      */
-    public Paper(int id,int x, int y, PaperType type, String title,String imagePath, String content, String addDate,int deepth) {
+    public Paper(int id,int x, int y, PaperType type, String title,String imageName, String content, String addDate,int deepth) {
         this.id = id;
         this.x=x;
         this.y=y;
         this.type = type;
-        this.imagePath=imagePath;
+        this.imageName=imageName;
         this.title = title;
         this.content = content;
         this.paperDate = addDate;
         this.deepth = deepth;
     }
-    
+
+    public String getAddDate() {
+        return addDate;
+    }
+
+    public void setAddDate(String addDate) {
+        this.addDate = addDate;
+    }
     public String getPaperDate() {
         return paperDate;
     }
 
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
     public void setPaperDate(String paperDate) {
         this.paperDate = paperDate;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
     }
     public int getDeepth() {
         return deepth;

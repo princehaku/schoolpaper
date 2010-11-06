@@ -32,7 +32,7 @@
 android:id="@+id/search"
 android:layout_width="77px"
 android:layout_height="wrap_content"
-android:text="搜纸片"
+android:text="找纸片"
 android:layout_alignParentBottom="true"
 android:layout_toRightOf="@+id/searchtext"
 >
@@ -60,7 +60,7 @@ android:layout_width="78px"
 android:layout_height="wrap_content"
 android:layout_marginBottom="1px"
 android:layout_marginLeft="1px"
-android:text="圈纸片"
+android:text="划纸片"
 android:layout_alignParentBottom="true"
 android:layout_alignParentLeft="true"
 >

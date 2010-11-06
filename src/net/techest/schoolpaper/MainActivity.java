@@ -129,15 +129,15 @@ public class MainActivity extends MapActivity implements OnTouchListener{
          new OnClickListener(){
 
             public void onClick(View arg0) {
-                if(searchText.getText().length()<1){
-                    alert.show("注意", "关键词请输入大于一个字");
-                    return;
-                }
                 //隐藏软键盘
                 InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
                 View view = getCurrentFocus();
-                if (view != null){  
+                if (view != null){
                   imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+                if(searchText.getText().length()<1){
+                    alert.show("注意", "关键词请输入大于一个字");
+                    return;
                 }
                 alert.show("提示", "请稍后 正在为您搜索纸片");
                 //清空已经有的坐标

@@ -129,9 +129,15 @@ public class MainActivity extends MapActivity implements OnTouchListener{
          new OnClickListener(){
 
             public void onClick(View arg0) {
-                if(searchText.getText().equals("")){
-                    alert.show("注意", "请输入关键词");
+                if(searchText.getText().length()<1){
+                    alert.show("注意", "关键词请输入大于一个字");
                     return;
+                }
+                //隐藏软键盘
+                InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                View view = getCurrentFocus();
+                if (view != null){  
+                  imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
                 alert.show("提示", "请稍后 正在为您搜索纸片");
                 //清空已经有的坐标
@@ -158,7 +164,6 @@ public class MainActivity extends MapActivity implements OnTouchListener{
     protected boolean isRouteDisplayed() {
        return false;
     }
-
     /**这个方法是给地图层上的画图层 触摸的时候画线
      * 离开的时候计算并发送信息给服务器
      * @param v
@@ -198,9 +203,9 @@ public class MainActivity extends MapActivity implements OnTouchListener{
                 GeoPoint p1= map.getProjection().fromPixels((int)PointStatu.maxX,(int)PointStatu.maxY);
                 GeoPoint p2= map.getProjection().fromPixels((int)PointStatu.minX,(int)PointStatu.minY);
                 GeoPoint temp = new GeoPoint(0, 0);
+                Log.i("","minX:"+(int)PointStatu.minX+"maxX:"+(int)PointStatu.maxX+"minY:"+(int)PointStatu.minY+"maxY:"+(int)PointStatu.maxY);
                 //infoBar.setText(p1.toString());
                 //画封闭线
-                Log.i("","minX:"+(int)PointStatu.minX+"maxX:"+(int)PointStatu.maxX+"minY:"+(int)PointStatu.minY+"maxY:"+(int)PointStatu.maxY);
                 polygon.enClose();
                 //开始动画
                 t=new MovieThread(this);
@@ -247,6 +252,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
             //-------------
             map.setClickable(true);
             map.requestFocus();
+            if(PublicData.centerPoint!=null)map.getController().setCenter(PublicData.centerPoint);
             alert.destory();
         }
     };
@@ -284,6 +290,7 @@ public class MainActivity extends MapActivity implements OnTouchListener{
             }
             PaperOverlay itemizedoverlay = new PaperOverlay(drawable,map.getContext(),MainActivity.this,Integer.parseInt(id));
             GeoPoint point = new GeoPoint(Integer.parseInt(x),Integer.parseInt(y));
+            PublicData.centerPoint=point;
             OverlayItem overlayitem = new OverlayItem(point, title, "");
             itemizedoverlay.addOverlay(overlayitem);
             mapOverlays.add(itemizedoverlay);

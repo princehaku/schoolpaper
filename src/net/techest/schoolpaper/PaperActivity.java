@@ -34,7 +34,10 @@ import android.widget.TextView;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.techest.schoolpaper.paper.Paper;
 
 /**
@@ -49,6 +52,7 @@ public class PaperActivity extends Activity {
      *
      */
     private static int nowIndex = 0;
+
     private boolean showBigPic = false;
 
     /** Called when the activity is first created. */
@@ -83,16 +87,31 @@ public class PaperActivity extends Activity {
             drawable = getResources().getDrawable(R.drawable.bg5);
         }
         ((AbsoluteLayout)findViewById(R.id.widget46)).setBackgroundDrawable(drawable);
-        Log.i("", "" + papers.size());
-
-        String imgurl = "http://schoolpaper.techest.net" + papers.get(idx).getImagePath();
+        Log.i("", "paper nums:" + papers.size());
+        String imgurl ="http://schoolpaper.techest.net/img/null.png";
+        try {
+            imgurl = "http://schoolpaper.techest.net/" + papers.get(nowIndex).getImagePath()+papers.get(idx).getImageName();
+        } catch (ParseException ex) {
+            Logger.getLogger(PaperActivity.class.getName()).log(Level.SEVERE, null, ex);
+        }
         ((TextView) findViewById(R.id.cc2)).setScrollContainer(true);
         ((TextView) findViewById(R.id.title)).setText("" + papers.get(idx).getTitle());
         ((TextView) findViewById(R.id.date)).setText("" + papers.get(idx).getPaperDate());
         Spanned text = Html.fromHtml(papers.get(idx).getContent());
         ((TextView) findViewById(R.id.cc2)).setText(text);
-        Log.v("", "http://schoolpaper.techest.net" + papers.get(idx).getImagePath());
+        Log.v("", imgurl);
         ImageView image = ((ImageView) findViewById(R.id.thumb));
+         try {
+            URL url = new URL(imgurl);
+            URLConnection conn = url.openConnection();
+            conn.connect();
+            InputStream is = conn.getInputStream();
+            Bitmap bm = BitmapFactory.decodeStream(is);
+            image.setImageBitmap(bm);
+            is.close(); }
+         catch (Exception e) {
+
+        }
         image.setOnClickListener(new OnClickListener() {
 
             public void onClick(View arg0) {
@@ -107,7 +126,13 @@ public class PaperActivity extends Activity {
      */
     private void showBigPic() {
         ArrayList<Paper> papers = PublicData.papers;
-        String imgurl = "http://schoolpaper.techest.net" + papers.get(nowIndex).getImagePath();
+
+        String imgurl ="http://schoolpaper.techest.net/img/null.png";
+        try {
+            imgurl = "http://schoolpaper.techest.net/" + papers.get(nowIndex).getImagePath()+papers.get(nowIndex).getImageName();
+        } catch (ParseException ex) {
+            Logger.getLogger(PaperActivity.class.getName()).log(Level.SEVERE, null, ex);
+        }
         try {
             URL url = new URL(imgurl);
             URLConnection conn = url.openConnection();
@@ -151,6 +176,7 @@ public class PaperActivity extends Activity {
     private int getIdxByid(int nowPaperId) {
         for (int i = 0; i < PublicData.papers.size(); i++) {
             if (nowPaperId == PublicData.papers.get(i).getId()) {
+                nowIndex=i;
                 return i;
             }
         }

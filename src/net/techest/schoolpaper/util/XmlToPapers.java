@@ -83,9 +83,9 @@ public class XmlToPapers {
                             String value = nd.getTextContent();
                             paper.setType(PaperType.parseType(Integer.parseInt(value)));
                         }
-                        if (nd.getNodeName().equals("picurl")) {
+                        if (nd.getNodeName().equals("picname")) {
                             String value = nd.getTextContent();
-                            paper.setImagePath(value);
+                            paper.setImageName(value);
                         }
                         if (nd.getNodeName().equals("content")) {
                             String value = nd.getTextContent();
@@ -94,6 +94,10 @@ public class XmlToPapers {
                         if (nd.getNodeName().equals("paperdate")) {
                             String value = nd.getTextContent();
                             paper.setPaperDate(value);
+                        }
+                        if (nd.getNodeName().equals("addtime")) {
+                            String value = nd.getTextContent();
+                            paper.setAddDate(value);
                         }
                         if (nd.getNodeName().equals("deepth")) {
                             String value = nd.getTextContent();

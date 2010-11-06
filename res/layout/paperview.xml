@@ -12,6 +12,7 @@ android:layout_height="30px"
 android:text="TextView"
 android:layout_x="142px"
 android:layout_y="54px"
+android:textColor="#ff000000"
 >
 </TextView>
 <TextView
@@ -21,6 +22,7 @@ android:layout_height="19px"
 android:text="TextView"
 android:layout_x="237px"
 android:layout_y="2px"
+android:textColor="#ff000000"
 >
 </TextView>
 <ScrollView
@@ -35,6 +37,7 @@ android:id="@+id/cc2"
 android:layout_width="292px"
 android:layout_height="287px"
 android:text="TextView"
+android:textColor="#ff000000"
 >
 </TextView>
 </ScrollView>

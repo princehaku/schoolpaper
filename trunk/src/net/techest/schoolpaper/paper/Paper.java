@@ -19,6 +19,7 @@ package net.techest.schoolpaper.paper;
 
 import android.graphics.Point;
 import android.util.Log;
+import java.text.ParseException;
 import java.util.StringTokenizer;
 
 /**纸片
@@ -61,7 +62,7 @@ public class Paper extends Point {
      */
     private String imagePath;
 
-    public String getImagePath() throws Exception {
+    public String getImagePath() throws ParseException {
         StringTokenizer st = new StringTokenizer(getAddDate(), " ");
         imagePath = "uploads/" + st.nextToken().replaceAll("-", "") + "/";
         Log.i("", imagePath);

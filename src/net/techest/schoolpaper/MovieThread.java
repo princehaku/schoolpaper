@@ -41,7 +41,7 @@ public class MovieThread extends Thread {
     
 
     public MovieThread(Activity res) {
-        MovieThread.res = res;
+        this.res = res;
     }
     /**用于外部终止线程
      *

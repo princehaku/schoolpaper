@@ -254,8 +254,11 @@ public class MainActivity extends MapActivity implements OnTouchListener {
             if (PublicData.centerPoint != null) {
                 map.getController().setCenter(PublicData.centerPoint);
             }
-            alert.destory();
-            if(PublicData.papers.isEmpty()){
+            //如果不是错误提示 摧毁对话框
+            if(msg.what!=0){
+                alert.destory();
+            }
+            if(PublicData.papers!=null&&PublicData.papers.isEmpty()){
                 alert.show("Oh~", "对不起..一张纸片都没有找到 T T");
             }
         }

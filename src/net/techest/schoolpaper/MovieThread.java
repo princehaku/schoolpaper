@@ -18,6 +18,7 @@
 package net.techest.schoolpaper;
 
 import android.app.Activity;
+import android.util.Log;
 
 /**用于显示动画
  *
@@ -47,13 +48,13 @@ public class MovieThread extends Thread {
      */
     private boolean isEnd = false;
     /**内部终止 至少划过一次扫描线才终止
-     * 
+     * @deprecated 
      */
     private boolean canEnd = false;
 
     @Override
     public void run() {
-        while (1 == 1 && isEnd == false&&canEnd==false) {
+        while (isEnd == false) {
             this.nextFrame();
             ((MainActivity) res).cacheUpdateHandler.sendEmptyMessage(1);
         }
@@ -73,6 +74,7 @@ public class MovieThread extends Thread {
             lasty += 3;
             if (lasty >= ((MainActivity) res).polygon.getHeight()) {
                 direction = 0;
+                Log.i("","Can be End by outer");
                 canEnd=true;
             }
         }

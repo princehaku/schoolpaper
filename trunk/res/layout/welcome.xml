@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : main.xml
+    Created on : 2010年10月19日, 上午8:47
+    Author     : princehaku
+    Description:
+        欢迎界面的布局
+-->
+<AbsoluteLayout
+android:background="@drawable/welcome"
+android:id="@+id/widget39"
+android:layout_width="fill_parent"
+android:layout_height="fill_parent"
+xmlns:android="http://schemas.android.com/apk/res/android"
+>
+<TextView
+android:id="@+id/tips"
+android:layout_width="fill_parent"
+android:layout_height="wrap_content"
+android:text="提示:"
+android:gravity="center"
+android:layout_x="0px"
+android:layout_y="329px"
+>
+</TextView>
+<ProgressBar
+android:id="@+id/loading"
+style="?android:attr/progressBarStyleHorizontal"
+android:layout_width="160px"
+android:progress="100"
+android:layout_height="wrap_content"
+android:layout_x="80px"
+android:layout_gravity="center_vertical" 
+android:layout_y="257px"
+>
+</ProgressBar>
+</AbsoluteLayout>

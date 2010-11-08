@@ -15,7 +15,7 @@
  *  Created on : 2010-11-5, 10:09:19
  *  Author     : princehaku
  */
-package net.techest.schoolpaper;
+package net.techest.schoolpaper.common;
 
 import com.google.android.maps.GeoPoint;
 import java.util.ArrayList;
@@ -26,7 +26,6 @@ import net.techest.schoolpaper.paper.Paper;
  * @author princehaku
  */
 public class PublicData {
-
     /**纸片数据
      * 
      */

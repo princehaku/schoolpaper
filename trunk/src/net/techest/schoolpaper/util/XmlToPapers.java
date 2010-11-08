@@ -28,19 +28,28 @@ import org.w3c.dom.NodeList;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
-/**
+/**将XML解析为纸片类
  *
  * @author princehaku
  */
 public class XmlToPapers {
 
     private ArrayList<Paper> papers = new ArrayList();
+    
     private String url;
-
+    /**
+     *
+     * @param url XML地址
+     */
     public XmlToPapers(String url) {
         this.url = url;
     }
 
+    /**将XML解析为纸片类
+     * 
+     * @return ArrayList<Paper>
+     * @throws Exception
+     */
     public ArrayList<Paper> parse() throws Exception {
         papers = new ArrayList();
         DocumentBuilderFactory docBuilderFactory = null;

@@ -54,7 +54,7 @@ public class FetchThread extends Thread {
     }
 
     public FetchThread(Activity res, String keywords) {
-        FetchThread.res = res;
+        this.res = res;
         this.keywords = keywords;
     }
 
@@ -93,12 +93,13 @@ public class FetchThread extends Thread {
                     addOverlay(p);
                 }
             }
+            ((MainActivity) res).finishHandler.sendEmptyMessage(1);
             //c.get("http://schoolpaper.techest.net/getPoints.php?x=123&y=123&w=123&h=123", "utf8");
         } catch (Exception ex) {
             Log.i("", "Error connecting Server :" + ex.getMessage());
             ((MainActivity) res).alert.show("错误啦~", "对不起.连接服务器失败 T_T");
+            ((MainActivity) res).finishHandler.sendEmptyMessage(0);
         }
-        ((MainActivity) res).finishHandler.sendEmptyMessage(1);
     }
 
     /**增加一个纸片到地图视图

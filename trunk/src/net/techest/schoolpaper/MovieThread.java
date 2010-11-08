@@ -18,7 +18,6 @@
 package net.techest.schoolpaper;
 
 import android.app.Activity;
-import net.techest.schoolpaper.MainActivity;
 
 /**用于显示动画
  *
@@ -26,7 +25,7 @@ import net.techest.schoolpaper.MainActivity;
  */
 public class MovieThread extends Thread {
 
-    /**资源
+    /**资源引用
      *
      */
     private static Activity res;
@@ -38,6 +37,7 @@ public class MovieThread extends Thread {
      *
      */
     private int direction = 0;
+    
 
     public MovieThread(Activity res) {
         MovieThread.res = res;
@@ -46,10 +46,14 @@ public class MovieThread extends Thread {
      *
      */
     private boolean isEnd = false;
+    /**内部终止 至少划过一次扫描线才终止
+     * 
+     */
+    private boolean canEnd = false;
 
     @Override
     public void run() {
-        while (1 == 1 && isEnd == false) {
+        while (1 == 1 && isEnd == false&&canEnd==false) {
             this.nextFrame();
             ((MainActivity) res).cacheUpdateHandler.sendEmptyMessage(1);
         }
@@ -69,6 +73,7 @@ public class MovieThread extends Thread {
             lasty += 3;
             if (lasty >= ((MainActivity) res).polygon.getHeight()) {
                 direction = 0;
+                canEnd=true;
             }
         }
         //Log.i("","line at:"+lasty);

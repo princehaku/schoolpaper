@@ -78,7 +78,7 @@ public class MainActivity extends MapActivity implements OnTouchListener {
         //初始化地图
         map = (MapView) findViewById(R.id.my_map);
         if (PublicData.centerPoint == null) {
-            map.getController().setCenter(new GeoPoint(30673860, 104141635));
+            map.getController().setCenter(new GeoPoint(30674949, 104143127));
         } else {
             map.getController().setCenter(PublicData.centerPoint);
         }
@@ -134,6 +134,7 @@ public class MainActivity extends MapActivity implements OnTouchListener {
                             return;
                         }
                         alert.show("提示", "请稍后 正在为您搜索纸片");
+                        PublicData.centerPoint=null;
                         //清空已经有的坐标
                         map.getOverlays().clear();
                         //从服务器获取信息
@@ -166,7 +167,7 @@ public class MainActivity extends MapActivity implements OnTouchListener {
      * @return
      */
     public boolean onTouch(View v, MotionEvent event) {
-        infoBar.setText(event.getAction() + "-" + event.getPressure() + "");
+        infoBar.setText("");
         //在线程运行时禁止点击
         if (t != null && t.isAlive()) {
             return false;
@@ -252,6 +253,9 @@ public class MainActivity extends MapActivity implements OnTouchListener {
                 map.getController().setCenter(PublicData.centerPoint);
             }
             alert.destory();
+            if(PublicData.papers.isEmpty()){
+                alert.show("Oh~", "对不起..一张纸片都没有找到 T T");
+            }
         }
     };
     /**在地图上增加信息点
@@ -267,7 +271,6 @@ public class MainActivity extends MapActivity implements OnTouchListener {
             String title = (String) Message.obtain(msg).getData().get("title");
             String type = (String) Message.obtain(msg).getData().get("type");
             String deepth = (String) Message.obtain(msg).getData().get("deepth");
-            infoBar.setText(title.toString());
             List<Overlay> mapOverlays = map.getOverlays();
             //处理色深
             Drawable drawable = getResources().getDrawable(R.drawable.overlay0);
@@ -290,7 +293,7 @@ public class MainActivity extends MapActivity implements OnTouchListener {
             //增加坐标
             PaperOverlay itemizedoverlay = new PaperOverlay(drawable, map.getContext(), MainActivity.this, Integer.parseInt(id));
             GeoPoint point = new GeoPoint(Integer.parseInt(x), Integer.parseInt(y));
-            PublicData.centerPoint = point;
+            //PublicData.centerPoint = point;
             OverlayItem overlayitem = new OverlayItem(point, title, "");
             itemizedoverlay.addOverlay(overlayitem);
             mapOverlays.add(itemizedoverlay);

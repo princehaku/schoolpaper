@@ -15,7 +15,7 @@
  *  Created on : 2010-10-29, 23:44:24
  *  Author     : princehaku
  */
-package net.techest.schoolpaper.work;
+package net.techest.schoolpaper;
 
 import android.app.Activity;
 import android.graphics.Point;
@@ -25,7 +25,8 @@ import android.os.Message;
 import android.util.Log;
 import com.google.android.maps.GeoPoint;
 import net.techest.schoolpaper.MainActivity;
-import net.techest.schoolpaper.PublicData;
+import net.techest.schoolpaper.R;
+import net.techest.schoolpaper.common.PublicData;
 import net.techest.schoolpaper.paper.Paper;
 import net.techest.schoolpaper.util.XmlToPapers;
 
@@ -44,7 +45,6 @@ public class FetchThread extends Thread {
     double pointx2;
     double pointy2;
     private String keywords;
-
     public FetchThread(Activity res, double x1, double x2, double y1, double y2) {
         FetchThread.res = res;
         //换算成标准的XX.XXXXXXX
@@ -69,13 +69,13 @@ public class FetchThread extends Thread {
         try {
             XmlToPapers xp = null;
             if (this.keywords.equals("")) {
-                xp = new XmlToPapers("http://schoolpaper.techest.net/getPoints.php?x1=" + this.pointx1
+                xp = new XmlToPapers(res.getString(R.string.serverbase)+"getPoints.php?x1=" + this.pointx1
                         + "&x2=" + this.pointx2 + "&y1=" + this.pointy1 + "&y2=" + this.pointy2);
-                Log.i("", "URL IS :http://schoolpaper.techest.net/getPoints.php?x1=" + this.pointx1
+                Log.i("", "URL IS :"+res.getString(R.string.serverbase)+"getPoints.php?x1=" + this.pointx1
                         + "&x2=" + this.pointx2 + "&y1=" + this.pointy1 + "&y2=" + this.pointy2);
             } else {
-                xp = new XmlToPapers("http://schoolpaper.techest.net/getPoints.php?key=" + Uri.encode(this.keywords));
-                Log.i("", "URL IS :http://schoolpaper.techest.net/getPoints.php?key=" + Uri.encode(this.keywords));
+                xp = new XmlToPapers(res.getString(R.string.serverbase)+"getPoints.php?key=" + Uri.encode(this.keywords));
+                Log.i("", "URL IS :"+res.getString(R.string.serverbase)+"getPoints.php?key=" + Uri.encode(this.keywords));
             }
             PublicData.papers = xp.parse();
             int size = PublicData.papers.size();
@@ -87,6 +87,7 @@ public class FetchThread extends Thread {
                 GeoPoint in = new GeoPoint(x, y);
                 Point out = new Point();
                 ((MainActivity) res).map.getProjection().toPixels(in, out);
+                //如果没有指定关键词 则判断是否在多边形内
                 if (this.keywords.equals("") && !((MainActivity) res).polygon.isInPolygon(out.x, out.y)) {
                     PublicData.papers.remove(i);
                 } else {

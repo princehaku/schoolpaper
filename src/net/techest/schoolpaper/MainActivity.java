@@ -17,9 +17,8 @@
  */
 package net.techest.schoolpaper;
 
+import net.techest.schoolpaper.common.PublicData;
 import net.techest.schoolpaper.graph.Polygon;
-import net.techest.schoolpaper.work.MovieThread;
-import net.techest.schoolpaper.work.FetchThread;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -48,13 +47,13 @@ import net.techest.schoolpaper.paper.PaperOverlay;
  */
 public class MainActivity extends MapActivity implements OnTouchListener {
 
-    public MapView map;
+    protected MapView map;
     //测试用的文本框
     private TextView infoBar;
     //测试用的文本框
     private TextView searchText;
     //多边形
-    public Polygon polygon;
+    protected Polygon polygon;
     //地图上的渲染层
     private ImageView renderMapContainer;
     //动画线程
@@ -62,7 +61,7 @@ public class MainActivity extends MapActivity implements OnTouchListener {
     //c/s模块的请求线程
     FetchThread f;
     //警告窗口
-    public AlertWindow alert;
+    protected AlertWindow alert;
 
     /** Called when the activity is first created. */
     @Override

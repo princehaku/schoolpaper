@@ -26,7 +26,7 @@ import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
 import java.util.ArrayList;
 import net.techest.schoolpaper.PaperActivity;
-import net.techest.schoolpaper.PublicData;
+import net.techest.schoolpaper.common.PublicData;
 
 /**地图上的标注
  *

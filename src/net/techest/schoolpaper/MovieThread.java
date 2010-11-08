@@ -15,7 +15,7 @@
  *  Created on : 2010-10-28, 23:02:17
  *  Author     : princehaku
  */
-package net.techest.schoolpaper.work;
+package net.techest.schoolpaper;
 
 import android.app.Activity;
 import net.techest.schoolpaper.MainActivity;

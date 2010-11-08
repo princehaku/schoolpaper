@@ -17,6 +17,7 @@
  */
 package net.techest.schoolpaper;
 
+import net.techest.schoolpaper.common.PublicData;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -45,11 +46,12 @@ import net.techest.schoolpaper.paper.Paper;
 public class PaperActivity extends Activity {
     //警告窗口
 
-    public AlertWindow alert;
+    protected AlertWindow alert;
     /**当前查看的纸片序号
      *
      */
     private static int nowIndex = 0;
+    
     private boolean showBigPic = false;
 
     /** Called when the activity is first created. */
@@ -85,10 +87,10 @@ public class PaperActivity extends Activity {
         }
         ((AbsoluteLayout) findViewById(R.id.widget46)).setBackgroundDrawable(drawable);
         Log.i("", "paper nums:" + papers.size());
-        String imgurl = "http://schoolpaper.techest.net/img/null.png";
+        String imgurl = getString(R.string.serverbase)+"img/null.png";
         try {
             String imgName = papers.get(idx).getImageName();
-            imgurl = "http://schoolpaper.techest.net/" + papers.get(nowIndex).getImagePath()
+            imgurl =getString(R.string.serverbase) + papers.get(nowIndex).getImagePath()
                     + "1-" + imgName.substring(0, 8)
                     + imgName.substring(imgName.indexOf("."), imgName.length());
         } catch (ParseException ex) {
@@ -126,10 +128,10 @@ public class PaperActivity extends Activity {
     private void showBigPic() {
         ArrayList<Paper> papers = PublicData.papers;
 
-        String imgurl = "http://schoolpaper.techest.net/img/null.png";
+        String imgurl =getString(R.string.serverbase)+"img/null.png";
         try {
             String imgName = papers.get(nowIndex).getImageName();
-            imgurl = "http://schoolpaper.techest.net/" + papers.get(nowIndex).getImagePath()
+            imgurl = getString(R.string.serverbase) + papers.get(nowIndex).getImagePath()
                     + "2-" + imgName.substring(0, 8)
                     + imgName.substring(imgName.indexOf("."), imgName.length());
         } catch (ParseException ex) {

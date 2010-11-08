@@ -18,6 +18,7 @@
 
 package net.techest.schoolpaper;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -28,22 +29,35 @@ import android.os.Message;
  */
  class HandlerWelcomeProc extends Handler {
 
-        private WelcomeActivity res;
+        private static Activity res;
 
-        public HandlerWelcomeProc(WelcomeActivity aThis) {
+        public HandlerWelcomeProc(Activity aThis) {
              this.res = aThis;
         }
         @Override
         public void handleMessage(Message msg) {
             int prc = msg.what;
+            if(prc > 0){
+                ((WelcomeActivity)res).tips.setText("Tips: "+res.getString(R.string.tips1));
+            }
+            if(prc > 50){
+                ((WelcomeActivity)res).tips.setText("Tips: "+res.getString(R.string.tips2));
+            }
             if (prc > 100) {
+                /*加载最初点
+                XmlToPapers xp=new XmlToPapers(res.getString(R.string.serverbase)+"getPoints.php?f=1");
+                try {
+                    PublicData.papers=xp.parse();
+                } catch (Exception ex) {
+                    Log.i("","First data Read error");
+                }*/
                 //启动主界面
                 Intent intent = new Intent();
                 intent.setClass(res, MainActivity.class);
                 res.startActivity(intent);
-                if(res.tr!=null)res.tr.cancel();
+                if(((WelcomeActivity)res).tr!=null)((WelcomeActivity)res).tr.cancel();
                 res.finish();
             }
-            res.myProgressBar.setProgress(prc);
+            ((WelcomeActivity)res).myProgressBar.setProgress(prc);
         }
     }

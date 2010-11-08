@@ -19,26 +19,30 @@
 package net.techest.schoolpaper;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import java.util.Timer;
 import java.util.TimerTask;
-import net.techest.schoolpaper.util.XmlToPapers;
 
 /**欢迎界面
  *
  * @author princehaku
  */
 public class WelcomeActivity extends Activity {
-    //进度条的进度
+    /**进度条的进度
+     *
+     */
     static int idx=0;
-    //进度条
+    /**进度条
+     *
+     */
     protected ProgressBar myProgressBar;
-    
-    private XmlToPapers XmlToPapers;
+    /**提示文本
+     *
+     */
+    protected TextView tips;
     
     Timer tr;
     /** Called when the activity is first created. */
@@ -47,6 +51,7 @@ public class WelcomeActivity extends Activity {
         super.onCreate(icicle);
         // ToDo add your GUI initialization code here
         setContentView(R.layout.welcome);
+        tips=(TextView)findViewById(R.id.tips);
         myProgressBar=(ProgressBar)findViewById(R.id.loading);
         //持续滚动
         tr=new Timer();
@@ -56,9 +61,7 @@ public class WelcomeActivity extends Activity {
                 WelcomeActivity.idx++;
                 process.sendEmptyMessage(WelcomeActivity.idx);
             }
-        }, 0,100);
-        //加载最初点
-        XmlToPapers =new XmlToPapers(getString(R.string.serverbase)+"getPoints.php?f=1");
+        }, 0,130);
 
     }
     private Handler process=new HandlerWelcomeProc(this);

@@ -50,7 +50,6 @@ android:layout_alignLeft="@+id/infoBar"
 android:id="@+id/infoBar"
 android:layout_width="wrap_content"
 android:layout_height="wrap_content"
-android:layout_alignParentTop="true"
 android:layout_toRightOf="@+id/quan"
 >
 </TextView>

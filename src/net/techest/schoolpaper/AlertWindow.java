@@ -20,18 +20,19 @@ import android.os.Message;
  */
 public class AlertWindow {
 
-    /**资源
+    /**资源引用
      *
      */
     private static Context res;
-    Dialog alert;
+    
+    private Dialog alert;
 
     /**从上级资源中构建
      * res一般是当前活动的Activity
      * @param res
      */
     AlertWindow(Context res) {
-        this.res = res;
+        AlertWindow.res = res;
     }
 
     /**显示对话框

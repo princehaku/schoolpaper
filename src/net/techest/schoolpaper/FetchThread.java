@@ -24,8 +24,6 @@ import android.os.Bundle;
 import android.os.Message;
 import android.util.Log;
 import com.google.android.maps.GeoPoint;
-import net.techest.schoolpaper.MainActivity;
-import net.techest.schoolpaper.R;
 import net.techest.schoolpaper.common.PublicData;
 import net.techest.schoolpaper.paper.Paper;
 import net.techest.schoolpaper.util.XmlToPapers;
@@ -36,7 +34,7 @@ import net.techest.schoolpaper.util.XmlToPapers;
  */
 public class FetchThread extends Thread {
 
-    /**资源
+    /**资源引用
      *
      */
     private static Activity res;
@@ -91,6 +89,7 @@ public class FetchThread extends Thread {
                 if (this.keywords.equals("") && !((MainActivity) res).polygon.isInPolygon(out.x, out.y)) {
                     PublicData.papers.remove(i);
                 } else {
+                    if(!this.keywords.equals(""))PublicData.centerPoint=in;
                     addOverlay(p);
                 }
             }

@@ -78,6 +78,7 @@ public class FetchThread extends Thread {
             PublicData.papers = xp.parse();
             int size = PublicData.papers.size();
             Log.i("", "paper nums is :" + size);
+            try {
             for (int i = 0; i < size; i++) {
                 Paper p = PublicData.papers.get(i);
                 int x = p.getX();
@@ -93,6 +94,9 @@ public class FetchThread extends Thread {
                     addOverlay(p);
                 }
             }
+            } catch (Exception ex) {
+            	Log.i("", "Array out :" + ex.getMessage());
+        		}
             ((MainActivity) res).finishHandler.sendEmptyMessage(1);
             //c.get("http://schoolpaper.techest.net/getPoints.php?x=123&y=123&w=123&h=123", "utf8");
         } catch (Exception ex) {

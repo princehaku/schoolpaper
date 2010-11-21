@@ -17,8 +17,6 @@
  */
 package net.techest.schoolpaper;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.techest.schoolpaper.common.PublicData;
 import net.techest.schoolpaper.graph.Polygon;
 import android.graphics.drawable.Drawable;

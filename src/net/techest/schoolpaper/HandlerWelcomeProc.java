@@ -56,7 +56,7 @@ import android.os.Message;
                 intent.setClass(res, MainActivity.class);
                 res.startActivity(intent);
                 if(((WelcomeActivity)res).tr!=null)((WelcomeActivity)res).tr.cancel();
-                res.finish();
+                ((WelcomeActivity)res).finish();
             }
             ((WelcomeActivity)res).myProgressBar.setProgress(prc);
         }
